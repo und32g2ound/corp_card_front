@@ -18,6 +18,9 @@ import Navigation from '@/components/home/Navigation.vue';
 import RegArea from '@/components/home/RegArea.vue';
 import Footer from '@/components/home/Footer.vue';
 
+import index from '@/store/index';
+import NProgress from 'nprogress';
+
 export default {
   name: 'Home',
   components: {
@@ -25,6 +28,14 @@ export default {
     Navigation,
     RegArea,
     Footer,
+  },
+  async beforeRouteEnter(to, from, next) {
+    NProgress.start();
+    await index.dispatch('fireStore/initialize');
+    await index.dispatch('fireStore/getHistory');
+    next(() => {
+      NProgress.done();
+    });
   },
 };
 </script>

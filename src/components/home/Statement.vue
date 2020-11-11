@@ -23,21 +23,19 @@
 
 <script>
 
-import common from '@/mixins/fireStore';
+import fireStore from '@/mixins/fireStore';
 import dayjs from 'dayjs';
 import TableRow from '@/components/home/TableRow.vue';
-// import Datepicker from 'vuejs-datepicker';
 
 export default {
   name: 'Statement',
   components: {
-    // Datepicker,
     TableRow,
   },
   props: {
     msg: String,
   },
-  mixins: [common],
+  mixins: [fireStore],
   data() {
     return {
       usedDate: null,
@@ -49,12 +47,6 @@ export default {
   },
   filters: {
     numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-  },
-  created() {
-    this.initialize();
-  },
-  mounted() {
-    this.getList();
   },
   methods: {
     addCommas(event) {

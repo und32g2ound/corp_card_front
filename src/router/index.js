@@ -26,4 +26,13 @@ const router = new VueRouter({
   routes,
 });
 
+// router.beforeEach((routeTo, routeFrom, next) => {
+//   NProgress.start();
+//   next();
+// });
+
+// router.afterEach(() => {
+//   NProgress.done();
+// });
+
 export default router;

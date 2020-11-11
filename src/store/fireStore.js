@@ -18,7 +18,7 @@ export default {
     },
   },
   actions: {
-    initialize({ commit }) {
+    async initialize({ commit }) {
       /**
        * 법인카드 한도 및 문서가 존재하지 않는 경우 생성
       */
@@ -35,7 +35,7 @@ export default {
         }
       });
     },
-    getHistory({ commit }) {
+    async getHistory({ commit }) {
       const historyList = [];
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
