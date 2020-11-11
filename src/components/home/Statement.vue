@@ -14,6 +14,8 @@
           <th>사용 내역 분류</th>
           <th>고객사</th>
           <th>사용금액</th>
+          <th>잔액</th>
+          <th>비고</th>
         </tr>
       </thead>
       <tbody>
