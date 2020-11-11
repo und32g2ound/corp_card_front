@@ -1,12 +1,13 @@
 <template>
   <fragment>
-      <td>{{item.date}}</td>
+      <!-- <td>{{item.date}}</td> -->
       <td>{{item.usedDate || ''}}</td>
       <td>{{item.category}}</td>
       <td>{{item.customer}}</td>
+      <td>{{item.purpose}}</td>
       <td>-{{utils.numberWithCommas(item.amount)}}</td>
-      <td>{{utils.numberWithCommas(item.balance)}}</td>
-      <td>{{item.memo}}</td>
+      <!-- <td>{{utils.numberWithCommas(item.balance)}}</td>
+      <td>{{item.memo}}</td> -->
     </fragment>
 </template>
 

@@ -6,24 +6,27 @@
     >
     </popup>
     <h2>UI 개발팀 법인카드 사용내역</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>내역등록일시</th>
-          <th>사용일시</th>
-          <th>사용 내역 분류</th>
-          <th>고객사</th>
-          <th>사용금액</th>
-          <th>잔액</th>
-          <th>비고</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in historyList" :key="index" @click="onClick(item)">
-          <TableRow :item=item />
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <!-- <th>내역등록일시</th> -->
+            <th>사용일시</th>
+            <th>분류</th>
+            <th>고객사</th>
+            <th>사용목적 또는 사유(상세히)</th>
+            <th>사용금액</th>
+            <!-- <th>잔액</th>
+            <th>비고</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in historyList" :key="index" @click="onClick(item)">
+            <TableRow :item=item />
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </template>
 
@@ -46,10 +49,12 @@ export default {
   mixins: [fireStore],
   data() {
     return {
-      usedDate: null,
+      usedDate: '',
       category: '',
-      amount: null,
-      memo: null,
+      customer: '',
+      purpose: '',
+      amount: '',
+      memo: '',
       checkedValue: [],
       visible: false,
       popupData: null,
@@ -80,6 +85,8 @@ export default {
       const useObejct = {
         usedDate: dayjs(this.usedDate).format('YYYY-MM-DD'),
         category: this.category,
+        customer: this.customer,
+        purpose: this.purpose,
         amount: this.amount,
         memo: this.memo || '',
         date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
@@ -93,6 +100,8 @@ export default {
         date: item.date,
         usedDate: item.usedDate,
         category: item.category,
+        customer: this.customer,
+        purpose: this.purpose,
         amount: item.amount,
         balance: item.balance,
         memo: item.memo,
@@ -108,7 +117,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+tr:hover {
 
+}
 .container {
   display: flex;
   flex-direction: column;
@@ -168,12 +179,15 @@ tr:nth-child(even) {
 }
 
 .table-scroll {
-  width:100%;
-  height:600px;
-  overflow:auto;
+  width: 60%;
+  height: 647px;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .registration {
   margin-left: 10px;
 }
+
 </style>

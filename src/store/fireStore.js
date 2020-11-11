@@ -40,7 +40,7 @@ export default {
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
           const {
-            amount, balance, date, timeInMs, category, usedDate, memo, customer,
+            amount, balance, date, timeInMs, category, usedDate, memo, customer, purpose,
           } = item.data();
           const usageObject = {
             amount,
@@ -51,6 +51,7 @@ export default {
             usedDate,
             memo,
             customer,
+            purpose,
           };
           historyList.push(usageObject);
         });
@@ -60,7 +61,7 @@ export default {
     },
     registration({ commit, state }, params) {
       const {
-        amount, date, category, timeInMs, memo, usedDate, customer,
+        amount, date, category, timeInMs, memo, usedDate, customer, purpose,
       } = params;
 
       const balance = state.totalBalanceAmount - amount;
@@ -75,6 +76,7 @@ export default {
         memo,
         usedDate,
         customer,
+        purpose,
       });
 
       fireStore.collection('corp_total').doc('balance').set({
@@ -86,7 +88,7 @@ export default {
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
           const {
-            amount, balance, date, timeInMs, category, memo, usedDate, customer,
+            amount, balance, date, timeInMs, category, memo, usedDate, customer, purpose,
           } = item.data();
           const usageObject = {
             amount,
@@ -97,6 +99,7 @@ export default {
             memo,
             usedDate,
             customer,
+            purpose,
           };
           historyList.push(usageObject);
         });
@@ -124,7 +127,7 @@ export default {
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
           const {
-            amount, balance, date, timeInMs, category, memo, usedDate,
+            amount, balance, date, timeInMs, category, memo, usedDate, purpose,
           } = item.data();
           const usageObject = {
             amount,
@@ -134,6 +137,7 @@ export default {
             category,
             memo,
             usedDate,
+            purpose,
           };
           historyList.push(usageObject);
         });

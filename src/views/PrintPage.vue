@@ -79,8 +79,12 @@
 
 <script>
 import fireStore from '@/mixins/fireStore';
+import utils from '@/utils/utils';
+import { cloneDeep } from 'lodash';
 
-const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
+// NOTE: yu-dw 확인 후 원래 사용한게 더 좋으면 다시 바꿔주세요
+// lodash에 있는 cloneDeep이 완벽하게 별개 객체로 clone 해준다고 해서 씀
+// const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
 
 export default {
   name: 'PrintPage',
@@ -128,23 +132,28 @@ export default {
       printData: [],
       totalAmount: 0,
       approver: '',
+      reversedHistoryList: [],
     };
   },
   created() {
     for (let i = 0; i < 25; i += 1) {
-      const data = deepCopy(this.tableData);
+      const data = cloneDeep(this.tableData);
       this.printData.push(data);
     }
 
-    for (let i = 0; i < this.historyList.length; i += 1) {
-      const history = this.historyList[i];
+    // 메인 사용내역서는 최신순이고
+    // 프린트용으로는 과거순으로 출력되야 하므로 역정렬 함
+    this.reversedHistoryList = cloneDeep(this.historyList).sort((a, b) => a.timeInMs - b.timeInMs);
 
-      const data = deepCopy(this.tableData);
+    for (let i = 0; i < this.reversedHistoryList.length; i += 1) {
+      const history = this.reversedHistoryList[i];
+
+      const data = cloneDeep(this.tableData);
       data[0].data = history.usedDate;
       data[1].data = history.category;
-      data[2].data = '';
-      data[3].data = history.memo;
-      data[4].data = history.amount;
+      data[2].data = history.customer;
+      data[3].data = history.purpose;
+      data[4].data = utils.numberWithCommas(history.amount);
       this.printData[i] = data;
     }
   },

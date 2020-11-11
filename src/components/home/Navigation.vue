@@ -13,7 +13,7 @@
       <li><a href="#">COMPANY</a></li>
       <li><a href="#">BUSINESS</a></li>
       <li><a href="#">RECRUIT</a></li>
-      <li><a href="#">CONTECT US</a></li>
+      <li><a href="#" @click="print">PREVIEW PRINT</a></li>
     </ul>
 
     <ul
@@ -41,6 +41,11 @@ export default {
     toggleBtn() {
       this.$refs.navbar_icons.classList.toggle('active');
       this.$refs.navbar_menus.classList.toggle('active');
+    },
+    print(event) {
+      // 출력
+      event.preventDefault();
+      this.$router.push('/print');
     },
   },
 };

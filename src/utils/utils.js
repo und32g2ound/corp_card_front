@@ -1,5 +1,5 @@
 export default {
-  numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+  numberWithCommas: (n) => (n).toLocaleString(),
   converttimeInMsToDate: (ms, locale = 'ko') => {
     const date = new Date(ms);
     const options = {

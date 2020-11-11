@@ -25,16 +25,22 @@
     >
 
     <input
+      class="purpose"
+      v-model="purpose"
+      placeholder="사용목적 또는 사유(상세히)"
+    >
+
+    <input
+      ref="amount"
       class="amount"
+      type="number"
       v-model="amount"
       placeholder="사용금액"
       style="ime-mode:disabled"
     >
 
     <input class="memo" v-model="memo" placeholder="비고">
-
     <button class="registration-button" @click="addUsage">등록</button>
-    <button class="print-button" @click="print">출력</button>
   </section>
 </template>
 
@@ -55,6 +61,7 @@ export default {
       usedDate: '',
       category: '',
       customer: '',
+      purpose: '',
       amount: '',
       memo: '',
       checkedValue: [],
@@ -125,6 +132,7 @@ export default {
         category: this.getCategoryName(this.category),
         amount: +this.amount,
         customer: this.customer,
+        purpose: this.purpose,
         memo: this.memo || '',
         date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         timeInMs: Date.now(), // time stamp
@@ -137,6 +145,7 @@ export default {
       this.usedDate = '';
       this.category = '';
       this.customer = '';
+      this.purpose = '';
       this.amount = '';
       this.memo = '';
     },
@@ -146,10 +155,6 @@ export default {
     },
     deleteUsage() {
       // 삭제
-    },
-    print() {
-      // 출력
-      this.$router.push('/print');
     },
     customFormatter(date) {
       return dayjs(date).format('YYYY-MM-DD');
@@ -167,7 +172,13 @@ export default {
   padding: 20px 20px;
 }
 
-.print-button {
-  margin-left: 100px;
+.amount::-webkit-outer-spin-button,
+.amount::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+
+// .print-button {
+//   margin-left: 100px;
+// }
 </style>
