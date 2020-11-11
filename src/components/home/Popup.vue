@@ -35,8 +35,10 @@
           </tbody>
         </table>
       </div>
-      <button @click="deleteUsage">삭제</button>
-      <button @click="$emit('update:visible', !visible)">닫기</button>
+      <div class="btn-area">
+        <button @click="deleteUsage">삭제</button>
+        <button @click="$emit('update:visible', !visible)">닫기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -132,15 +134,17 @@ td, th {
   text-align: center;
   font-weight: bold;
 }
-
-button {
+.btn-area {
   position: relative;
-  left: 50%;
-  width: 50px;
   height: 50px;
   margin: 10px;
-  font-size: 1em;
   text-align: center;
+}
+
+button {
+  width: 50px;
+  margin: 10px;
+  font-size: 1em;
   font-weight: bold;
 }
 
