@@ -4,6 +4,9 @@
       class="datepicker"
       v-model="usedDate"
       :format="customFormatter"
+      :language="ko"
+      :disabled-dates="disabledDates"
+      :highlighted="highlighted"
       placeholder="사용일시(필수)"
     />
 
@@ -33,6 +36,7 @@
 import fireStore from '@/mixins/fireStore';
 import dayjs from 'dayjs';
 import Datepicker from 'vuejs-datepicker';
+import { ko } from 'vuejs-datepicker/dist/locale';
 
 export default {
   name: 'RegArea',
@@ -48,6 +52,23 @@ export default {
       memo: null,
       checkedValue: [],
       categoryList: ['식사', '간식', '접대', '비품', '회식', '기타'],
+      ko,
+      disabledDates: {
+        customPredictor(date) {
+          if (dayjs(date).format('YYYY-MM-DD') > dayjs(Date.now()).format('YYYY-MM-DD')) {
+            return true;
+          }
+          return false;
+        },
+      },
+      highlighted: {
+        customPredictor(date) {
+          if (dayjs(date).format('YYYY-MM-DD') === dayjs(Date.now()).format('YYYY-MM-DD')) {
+            return true;
+          }
+          return false;
+        },
+      },
     };
   },
   methods: {
@@ -112,8 +133,8 @@ export default {
     deleteUsage() {
       // 삭제
     },
-    customFormatter(value) {
-      return dayjs(value).format('YYYY-MM-DD');
+    customFormatter(date) {
+      return dayjs(date).format('YYYY-MM-DD');
     },
   },
 };
