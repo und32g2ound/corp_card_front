@@ -29,6 +29,7 @@
     <input class="memo" v-model="memo" placeholder="비고">
 
     <button class="registration-button" @click="addUsage">등록</button>
+    <button class="print-button" @click="print">출력</button>
   </section>
 </template>
 
@@ -133,6 +134,10 @@ export default {
     deleteUsage() {
       // 삭제
     },
+    print() {
+      // 출력
+      this.$router.push('/print');
+    },
     customFormatter(date) {
       return dayjs(date).format('YYYY-MM-DD');
     },
@@ -147,5 +152,9 @@ export default {
   justify-content: center;
   // background-color: #263343;
   padding: 20px 20px;
+}
+
+.print-button {
+  margin-left: 100px;
 }
 </style>
