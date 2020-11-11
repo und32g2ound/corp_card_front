@@ -11,15 +11,20 @@
       class="category"
       v-model="category"
     >
-        <option value="" selected disabled hidden >분류선택(필수)</option>
+        <option value="" selected disabled hidden >분류선택</option>
         <option v-for="(item, index) in  categoryList" :value="index" :key="index">{{item}}</option>
     </select>
 
     <input
+      class="customer"
+      v-model="customer"
+      placeholder="고객사"
+    >
+
+    <input
       class="amount"
       v-model="amount"
-      placeholder="사용금액(필수)"
-      @keyup="addCommas"
+      placeholder="사용금액"
       style="ime-mode:disabled"
     >
 
@@ -42,10 +47,11 @@ export default {
   mixins: [fireStore],
   data() {
     return {
-      usedDate: null,
+      usedDate: '',
       category: '',
-      amount: null,
-      memo: null,
+      customer: '',
+      amount: '',
+      memo: '',
       checkedValue: [],
       categoryList: ['식사', '간식', '접대', '비품', '회식', '기타'],
     };
@@ -78,9 +84,6 @@ export default {
       }
       return categoryName;
     },
-    addCommas(event) {
-      return event.key.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    },
     addUsage() {
       if (!this.usedDate) {
         alert('사용일시를 입력해주세요.');
@@ -98,14 +101,24 @@ export default {
       const useObejct = {
         usedDate: dayjs(this.usedDate).format('YYYY-MM-DD'),
         category: this.getCategoryName(this.category),
-        amount: this.amount,
+        amount: +this.amount,
+        customer: this.customer,
         memo: this.memo || '',
         date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
         timeInMs: Date.now(), // time stamp
       };
 
       this.registration(useObejct);
+      this.initComponentData();
     },
+    initComponentData() {
+      this.usedDate = '';
+      this.category = '';
+      this.customer = '';
+      this.amount = '';
+      this.memo = '';
+    },
+
     editUsage() {
       // 수정
     },

@@ -40,7 +40,7 @@ export default {
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
           const {
-            amount, balance, date, timeInMs, category, usedDate, memo,
+            amount, balance, date, timeInMs, category, usedDate, memo, customer,
           } = item.data();
           const usageObject = {
             amount,
@@ -50,6 +50,7 @@ export default {
             category,
             usedDate,
             memo,
+            customer,
           };
           historyList.push(usageObject);
         });
@@ -59,12 +60,13 @@ export default {
     },
     registration({ commit, state }, params) {
       const {
-        amount, date, category, timeInMs, memo, usedDate,
+        amount, date, category, timeInMs, memo, usedDate, customer,
       } = params;
 
       const balance = state.totalBalanceAmount - amount;
 
-      fireStore.collection('corp_usage').doc(date).set({
+      const docKey = String(timeInMs);
+      fireStore.collection('corp_usage').doc(docKey).set({
         amount,
         date,
         category,
@@ -72,6 +74,7 @@ export default {
         balance,
         memo,
         usedDate,
+        customer,
       });
 
       fireStore.collection('corp_total').doc('balance').set({
@@ -83,7 +86,7 @@ export default {
       fireStore.collection('corp_usage').get().then((usageList) => {
         usageList.forEach((item) => {
           const {
-            amount, balance, date, timeInMs, category, memo, usedDate,
+            amount, balance, date, timeInMs, category, memo, usedDate, customer,
           } = item.data();
           const usageObject = {
             amount,
@@ -93,6 +96,7 @@ export default {
             category,
             memo,
             usedDate,
+            customer,
           };
           historyList.push(usageObject);
         });

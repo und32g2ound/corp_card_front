@@ -3,24 +3,29 @@
       <td>{{item.date}}</td>
       <td>{{item.usedDate || ''}}</td>
       <td>{{item.category}}</td>
-      <td>-{{item.amount | numberWithCommas}}</td>
-      <td>{{item.balance | numberWithCommas}}</td>
+      <td>{{item.customer}}</td>
+      <td>-{{utils.numberWithCommas(item.amount)}}</td>
+      <td>{{utils.numberWithCommas(item.balance)}}</td>
       <td>{{item.memo}}</td>
     </fragment>
 </template>
 
 <script>
+import utils from '@/utils/utils';
+
 export default {
   name: 'TableRow',
+  mixins: [utils],
   props: {
     item: {
       type: Object,
-      default: null,
       required: true,
     },
   },
-  filters: {
-    numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+  data() {
+    return {
+      utils,
+    };
   },
 };
 </script>
