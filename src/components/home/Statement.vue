@@ -1,5 +1,10 @@
 <template>
   <section class="container">
+    <popup
+      :visible.sync="visible"
+      :popupData="popupData"
+    >
+    </popup>
     <h2>UI 개발팀 법인카드 사용내역</h2>
     <table>
       <thead>
@@ -8,12 +13,10 @@
           <th>사용일시</th>
           <th>사용 내역 분류</th>
           <th>사용금액</th>
-          <th>잔액</th>
-          <th>비고</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in historyList" :key="index">
+        <tr v-for="(item, index) in historyList" :key="index" @click="onClick(item)">
           <TableRow :item=item />
         </tr>
       </tbody>
@@ -26,11 +29,13 @@
 import fireStore from '@/mixins/fireStore';
 import dayjs from 'dayjs';
 import TableRow from '@/components/home/TableRow.vue';
+import popup from './Popup.vue';
 
 export default {
   name: 'Statement',
   components: {
     TableRow,
+    popup,
   },
   props: {
     msg: String,
@@ -43,6 +48,8 @@ export default {
       amount: null,
       memo: null,
       checkedValue: [],
+      visible: false,
+      popupData: null,
     };
   },
   filters: {
@@ -78,11 +85,16 @@ export default {
 
       this.registration(useObejct);
     },
-    editUsage() {
-      // 수정
-    },
-    deleteUsage() {
-      // 삭제
+    onClick(item) {
+      this.popupData = {
+        date: item.date,
+        usedDate: item.usedDate,
+        category: item.category,
+        amount: item.amount,
+        balance: item.balance,
+        memo: item.memo,
+      };
+      this.visible = !this.visible;
     },
     customFormatter(value) {
       return dayjs(value).format('YYYY-MM-DD');

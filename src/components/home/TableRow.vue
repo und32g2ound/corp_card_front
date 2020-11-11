@@ -4,8 +4,6 @@
       <td>{{item.usedDate || ''}}</td>
       <td>{{item.category}}</td>
       <td>-{{item.amount | numberWithCommas}}</td>
-      <td>{{item.balance | numberWithCommas}}</td>
-      <td>{{item.memo}}</td>
     </fragment>
 </template>
 
