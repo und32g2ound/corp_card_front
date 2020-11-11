@@ -18,6 +18,7 @@ export default {
       'initialize',
       'getHistory',
       'registration',
+      'deleteData',
     ]),
   },
 };
