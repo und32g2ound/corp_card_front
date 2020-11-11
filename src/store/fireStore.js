@@ -100,5 +100,42 @@ export default {
         commit('setHistoryList', { historyList });
       });
     },
+    deleteData({ commit, state }, params) {
+      const {
+        amount, date,
+      } = params;
+
+      const balance = state.totalBalanceAmount + amount;
+
+      fireStore.collection('corp_usage').doc(date).delete().then(() => {
+        console.log('Document successfully deleted!');
+      });
+
+      fireStore.collection('corp_total').doc('balance').set({
+        amount: balance,
+      });
+      commit('setTotalBalanceAmount', { totalBalanceAmount: balance });
+
+      const historyList = [];
+      fireStore.collection('corp_usage').get().then((usageList) => {
+        usageList.forEach((item) => {
+          const {
+            amount, balance, date, timeInMs, category, memo, usedDate,
+          } = item.data();
+          const usageObject = {
+            amount,
+            balance,
+            date,
+            timeInMs,
+            category,
+            memo,
+            usedDate,
+          };
+          historyList.push(usageObject);
+        });
+
+        commit('setHistoryList', { historyList });
+      });
+    },
   },
 };

@@ -35,6 +35,7 @@
           </tbody>
         </table>
       </div>
+      <button @click="deleteUsage">삭제</button>
       <button @click="$emit('update:visible', !visible)">닫기</button>
     </div>
   </div>
@@ -42,12 +43,12 @@
 
 <script>
 
-import common from '@/mixins/fireStore';
+import fireStore from '@/mixins/fireStore';
 
 export default {
   name: 'Popup',
   props: ['visible', 'popupData'],
-  mixins: [common],
+  mixins: [fireStore],
   filters: {
     numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
   },
@@ -63,6 +64,15 @@ export default {
   },
   methods: {
     handleWrapperClick() {
+      this.$emit('update:visible', false);
+    },
+    deleteUsage() {
+      const useObejct = {
+        amount: this.popupData.amount,
+        date: this.popupData.date,
+      };
+
+      this.deleteData(useObejct);
       this.$emit('update:visible', false);
     },
   },
