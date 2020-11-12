@@ -10,34 +10,96 @@
           <tbody>
             <tr>
               <td class="title">내역등록일시</td>
-              <td>{{popupData.date}}</td>
+              <td class="contents">{{popupData.date}}</td>
             </tr>
             <tr>
               <td class="title">사용일시</td>
-              <td>{{popupData.usedDate || ''}}</td>
+              <td v-if="isEdit === 0">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(0)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.usedDate || ''}}</span>
+                <button class="edit-btn" @click="editMode(0)">수정</button>
+              </td>
             </tr>
             <tr>
               <td class="title">사용 내역 분류</td>
-              <td>{{popupData.category}}</td>
+              <td v-if="isEdit === 1">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(1)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.category || ''}}</span>
+                <button class="edit-btn" @click="editMode(1)">수정</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="title">고객사</td>
+              <td v-if="isEdit === 2">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(2)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.customer || ''}}</span>
+                <button class="edit-btn" @click="editMode(2)">수정</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="title">사용 목적 또는 사유</td>
+              <td v-if="isEdit === 3">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(3)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.purpose || ''}}</span>
+                <button class="edit-btn" @click="editMode(3)">수정</button>
+              </td>
             </tr>
             <tr>
               <td class="title">사용금액</td>
-              <td>{{popupData.amount | numberWithCommas}}</td>
+              <td v-if="isEdit === 4">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(4)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.amount | numberWithCommas}}</span>
+                <button class="edit-btn" @click="editMode(4)">수정</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="title">비고</td>
+              <td v-if="isEdit === 5">
+                <span>
+                  <input class="">
+                </span>
+                <button class="edit-btn" @click="editData(5)">수정완료</button>
+              </td>
+              <td v-else>
+                <span>{{popupData.memo}}</span>
+                <button class="edit-btn" @click="editMode(5)">수정</button>
+              </td>
             </tr>
             <tr>
               <td class="title">잔액</td>
               <td>{{popupData.balance | numberWithCommas}}</td>
             </tr>
-            <tr>
-              <td class="title">비고</td>
-              <td>{{popupData.memo}}</td>
-            </tr>
           </tbody>
         </table>
       </div>
       <div class="btn-area">
-        <button @click="deleteUsage">삭제</button>
-        <button @click="$emit('update:visible', !visible)">닫기</button>
+        <button class="footer-btn" @click="deleteUsage">삭제</button>
+        <button class="footer-btn" @click="$emit('update:visible', !visible)">닫기</button>
       </div>
     </div>
   </div>
@@ -56,15 +118,30 @@ export default {
   },
   data() {
     return {
-      //
+      editIndex: null,
     };
   },
   watch: {
     popupData() {
       console.log('popupData:', this.popupData);
     },
+    visible() {
+      this.editIndex = null;
+    },
+  },
+  computed: {
+    isEdit() {
+      return this.editIndex;
+    },
   },
   methods: {
+    editData(index) {
+      console.log('index: ', index);
+      // index에 따른 데이터 수정 case 생성 예정
+    },
+    editMode(index) {
+      this.editIndex = index;
+    },
     handleWrapperClick() {
       this.$emit('update:visible', false);
     },
@@ -130,6 +207,10 @@ td, th {
   padding: 8px;
 }
 
+input {
+  width: 100px;
+}
+
 .title {
   text-align: center;
   font-weight: bold;
@@ -141,11 +222,18 @@ td, th {
   text-align: center;
 }
 
-button {
+.footer-btn {
   width: 50px;
   margin: 10px;
   font-size: 1em;
   font-weight: bold;
+}
+.edit-btn {
+  margin-left: 10px;
+}
+
+.contents {
+  width: 60%;
 }
 
 </style>
