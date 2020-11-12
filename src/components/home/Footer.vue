@@ -125,4 +125,12 @@ export default {
   font-size: smaller;
 }
 
+@media screen and (max-width:743px) {
+  .row {
+    flex-direction: column;
+  }
+  .fnb {
+    flex-direction: column;
+  }
+}
 </style>

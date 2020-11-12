@@ -1,5 +1,5 @@
 import fireStore from '@/config/fireStore';
-import MAX_LIMIT_A_MONTH from '@/config/constants';
+import { MAX_LIMIT_A_MONTH } from '@/config/constants';
 
 export default {
   namespaced: true,

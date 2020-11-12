@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <section class="container">
+    <section class="container" ref="container">
       <Datepicker
         class="datepicker"
         v-model="usedDate"
@@ -59,11 +59,13 @@
 </template>
 
 <script>
-// import fireStore from '@/mixins/fireStore';
+
 import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import Datepicker from 'vuejs-datepicker';
 import { ko } from 'vuejs-datepicker/dist/locale';
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
 
 export default {
   name: 'RegArea',
@@ -71,6 +73,12 @@ export default {
     Datepicker,
   },
   mixins: [corpStore],
+  created() {
+    eventBus.$on(EVENTBUS_EVENT.TOGGLE_ACTIVE, this.toggleActive);
+  },
+  beforeDestroy() {
+    eventBus.$off(EVENTBUS_EVENT.TOGGLE_ACTIVE);
+  },
   data() {
     return {
       usedDate: '',
@@ -171,6 +179,9 @@ export default {
     customFormatter(date) {
       return dayjs(date).format('YYYY-MM-DD');
     },
+    toggleActive() {
+      this.$refs.container.classList.toggle('active');
+    },
   },
 };
 </script>
@@ -180,8 +191,11 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  // background-color: #263343;
   padding: 20px 20px;
+}
+
+.container.active {
+  display: flex;
 }
 
 .amount::-webkit-outer-spin-button,
@@ -207,5 +221,13 @@ export default {
   text-align: center;
   color: red;
   font-size: 14px;
+}
+
+@media screen and (max-width:743px) {
+  .container {
+    flex-direction: column;
+    padding: 8px 24px;
+    display: none;
+  }
 }
 </style>

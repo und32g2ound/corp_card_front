@@ -35,12 +35,17 @@
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
+
 export default {
   name: 'Navigation',
   methods: {
     toggleBtn() {
       this.$refs.navbar_icons.classList.toggle('active');
       this.$refs.navbar_menus.classList.toggle('active');
+      console.log(EVENTBUS_EVENT.TOGGLE_ACTIVE);
+      eventBus.$emit(EVENTBUS_EVENT.TOGGLE_ACTIVE);
     },
     print(event) {
       // 출력

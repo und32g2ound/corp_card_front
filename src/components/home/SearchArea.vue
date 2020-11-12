@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <section class="container">
+    <section class="container" ref="container">
       <select
         class="category"
         v-model="category"
@@ -24,12 +24,19 @@
 </template>
 
 <script>
-// import fireStore from '@/mixins/fireStore';
 import corpStore from '@/mixins/corpStore';
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
 
 export default {
   name: 'SearchArea',
   mixins: [corpStore],
+  created() {
+    eventBus.$on(EVENTBUS_EVENT.TOGGLE_ACTIVE, this.toggleActive);
+  },
+  beforeDestroy() {
+    eventBus.$off(EVENTBUS_EVENT.TOGGLE_ACTIVE);
+  },
   data() {
     return {
       category: '전체',
@@ -39,6 +46,9 @@ export default {
   methods: {
     searchClick() {
       this.setSearchHistoryList({ category: this.category });
+    },
+    toggleActive() {
+      this.$refs.container.classList.toggle('active');
     },
   },
 };
@@ -52,7 +62,17 @@ export default {
   padding: 8px 20px;
 }
 
+.container.active {
+  display: flex;
+}
+
 .registration-button {
   margin-left: 10px;
+}
+
+@media screen and (max-width:743px) {
+  .container {
+    display: none;
+  }
 }
 </style>
