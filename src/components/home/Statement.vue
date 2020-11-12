@@ -138,14 +138,15 @@ table {
   width: 90%;
 }
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: center;
-  padding: 8px;
+thead {
+  background-color:#bdbdbd;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
+td, th {
+  border: 1px solid #000000;
+  text-align: center;
+  padding: 8px;
+  font-weight: medium;
 }
 
 .get-list {
@@ -168,14 +169,6 @@ tr:nth-child(even) {
 
 .input-area {
   margin: 20px;
-}
-
-.get-list-button{
-  width: 200px;
-  height: 50px;
-  font-size: 1em;
-  text-align: center;
-  font-weight: bold;
 }
 
 .table-scroll {

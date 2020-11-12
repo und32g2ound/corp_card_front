@@ -33,12 +33,8 @@ export default {
 
 <style lang="scss" scoped>
 td, th {
-  border: 1px solid #dddddd;
+  border: 1px solid #000000;
   text-align: center;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
+  padding: 1px;
 }
 </style>
