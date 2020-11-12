@@ -1,47 +1,61 @@
 <template>
-  <section class="container">
-    <Datepicker
-      class="datepicker"
-      v-model="usedDate"
-      :format="customFormatter"
-      :language="ko"
-      :disabled-dates="disabledDates"
-      :highlighted="highlighted"
-      placeholder="사용일시(필수)"
-    />
+  <fragment>
+    <section class="container">
+      <Datepicker
+        class="datepicker"
+        v-model="usedDate"
+        :format="customFormatter"
+        :language="ko"
+        :disabled-dates="disabledDates"
+        :highlighted="highlighted"
+        placeholder="사용일시(필수)"
+      />
 
-    <select
-      class="category"
-      v-model="category"
-    >
+      <select
+        class="category"
+        v-model="category"
+      >
         <option value="" selected disabled hidden >분류선택</option>
         <option v-for="(item, index) in  categoryList" :value="index" :key="index">{{item}}</option>
-    </select>
+      </select>
 
-    <input
-      class="customer"
-      v-model="customer"
-      placeholder="고객사"
+      <input
+        class="customer"
+        v-model="customer"
+        placeholder="고객사"
+      >
+
+      <input
+        class="purpose"
+        v-model="purpose"
+        placeholder="사용목적 또는 사유(상세히)"
+      >
+
+      <input
+        ref="amount"
+        class="amount"
+        type="number"
+        v-model="amount"
+        placeholder="사용금액"
+        style="ime-mode:disabled"
+      >
+
+      <input class="memo" v-model="memo" placeholder="비고">
+      <button
+        class="registration-button"
+        ref="registrationButton"
+        @click="addUsage"
+      >등록</button>
+
+    </section>
+    <div
+      class="invalidate"
+      ref="invalidate"
     >
-
-    <input
-      class="purpose"
-      v-model="purpose"
-      placeholder="사용목적 또는 사유(상세히)"
-    >
-
-    <input
-      ref="amount"
-      class="amount"
-      type="number"
-      v-model="amount"
-      placeholder="사용금액"
-      style="ime-mode:disabled"
-    >
-
-    <input class="memo" v-model="memo" placeholder="비고">
-    <button class="registration-button" @click="addUsage">등록</button>
-  </section>
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>필수 입력사항을 확인해주세요.</span>
+    </div>
+  </fragment>
 </template>
 
 <script>
@@ -114,16 +128,13 @@ export default {
       return categoryName;
     },
     addUsage() {
-      if (!this.usedDate) {
-        alert('사용일시를 입력해주세요.');
-        return;
-      }
-      if (!this.category) {
-        alert('분류를 선택해주세요.');
-        return;
-      }
-      if (!this.amount) {
-        alert('사용금액을 입력해주세요.');
+      if (!this.usedDate || !this.category || !this.customer || !this.purpose || !this.amount) {
+        this.$refs.invalidate.classList.toggle('active');
+        this.$refs.registrationButton.disabled = true;
+        setTimeout(() => {
+          this.$refs.invalidate.classList.toggle('active');
+          this.$refs.registrationButton.disabled = false;
+        }, 3000);
         return;
       }
 
@@ -178,7 +189,22 @@ export default {
   margin: 0;
 }
 
-// .print-button {
-//   margin-left: 100px;
-// }
+.invalidate {
+  display: none;
+  text-align: center;
+  color: red;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.invalidate i {
+  margin: 0 8px;
+}
+
+.invalidate.active {
+  display: block;
+  text-align: center;
+  color: red;
+  font-size: 14px;
+}
 </style>

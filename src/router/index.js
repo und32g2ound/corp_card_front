@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: '/print',
-    name: 'Print',
+    name: 'PrintPage',
     component: () => import(/* webpackChunkName: "print" */ '../views/PrintPage.vue'),
   },
 ];

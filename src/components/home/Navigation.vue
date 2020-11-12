@@ -45,7 +45,7 @@ export default {
     print(event) {
       // 출력
       event.preventDefault();
-      this.$router.push('/print');
+      this.$router.push({ name: 'PrintPage' });
     },
   },
 };

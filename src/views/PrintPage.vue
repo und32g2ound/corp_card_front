@@ -136,6 +136,9 @@ export default {
     };
   },
   created() {
+    // 프린트 페이지에서 browser refresh하는 경우 home으로 routing
+    if (!this.historyList.length) this.$router.push({ name: 'Home' });
+
     for (let i = 0; i < 25; i += 1) {
       const data = cloneDeep(this.tableData);
       this.printData.push(data);
@@ -149,7 +152,8 @@ export default {
       const history = this.reversedHistoryList[i];
 
       const data = cloneDeep(this.tableData);
-      data[0].data = history.usedDate;
+      const usedDate = history.usedDate.split('-');
+      data[0].data = `${usedDate[1]}월${usedDate[2]}일`;
       data[1].data = history.category;
       data[2].data = history.customer;
       data[3].data = history.purpose;
