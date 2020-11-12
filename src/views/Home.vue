@@ -4,6 +4,8 @@
     <Navigation />
     <!-- 등록 및 입력 영역 -->
     <RegArea />
+    <!-- 조회 영역 -->
+    <SearchArea />
     <!-- statement(내역) -->
     <Statement />
     <!-- footer -->
@@ -16,6 +18,7 @@
 import Statement from '@/components/home/Statement.vue';
 import Navigation from '@/components/home/Navigation.vue';
 import RegArea from '@/components/home/RegArea.vue';
+import SearchArea from '@/components/home/SearchArea.vue';
 import Footer from '@/components/home/Footer.vue';
 
 import index from '@/store/index';
@@ -27,6 +30,7 @@ export default {
     Statement,
     Navigation,
     RegArea,
+    SearchArea,
     Footer,
   },
   async beforeRouteEnter(to, from, next) {

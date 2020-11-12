@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in historyList" :key="index" @click="onClick(item)">
+          <tr v-for="(item, index) in searchHistoryList" :key="index" @click="onClick(item)">
             <TableRow :item=item />
           </tr>
         </tbody>
