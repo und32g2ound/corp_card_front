@@ -1,4 +1,4 @@
-const LOCAL_DEV = true; // Local 개발 상태에서만 true로 셋팅한다.
+const LOCAL_DEV = false; // Local 개발 상태에서만 true로 셋팅한다.
 
 const appConfig = {
   /**

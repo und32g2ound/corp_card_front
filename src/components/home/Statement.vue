@@ -32,7 +32,6 @@
 
 <script>
 
-// import common from '@/mixins/fireStore';
 import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import TableRow from '@/components/home/TableRow.vue';

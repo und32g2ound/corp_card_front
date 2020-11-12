@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import fireStore from '@/mixins/fireStore';
+import corpStore from '@/mixins/corpStore';
 import utils from '@/utils/utils';
 import { cloneDeep } from 'lodash';
 import NProgress from 'nprogress';
@@ -89,7 +89,7 @@ import NProgress from 'nprogress';
 
 export default {
   name: 'PrintPage',
-  mixins: [fireStore],
+  mixins: [corpStore],
   beforeRouteEnter(to, from, next) {
     NProgress.start();
     next(() => {

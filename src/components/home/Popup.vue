@@ -107,7 +107,6 @@
 
 <script>
 
-// import fireStore from '@/mixins/fireStore';
 import utils from '@/utils/utils';
 import corpStore from '@/mixins/corpStore';
 

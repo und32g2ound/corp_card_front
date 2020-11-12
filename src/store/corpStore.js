@@ -1,5 +1,5 @@
 import axios from 'axios';
-import constants from '@/config/constants';
+import { MAX_LIMIT_A_MONTH } from '@/config/constants';
 import appConfig from '@/config/appConfig';
 
 export default {
@@ -38,7 +38,7 @@ export default {
         console.log('initialize total : ', total);
 
         if (!total || !total.balance) {
-          dispatch('setTotalAmout', constants.MAX_LIMIT_A_MONTH);
+          dispatch('setTotalAmout', MAX_LIMIT_A_MONTH);
         } else {
           commit('setTotalBalanceAmount', { totalBalanceAmount: total.balance });
         }
@@ -48,7 +48,7 @@ export default {
       axios.post(`${appConfig.serverIP}/corp/setTotal`, {
         balance,
       }).then(() => {
-        commit('setTotalBalanceAmount', { totalBalanceAmount: constants.MAX_LIMIT_A_MONTH });
+        commit('setTotalBalanceAmount', { totalBalanceAmount: MAX_LIMIT_A_MONTH });
       });
     },
     getHistory({ state, commit }) {
