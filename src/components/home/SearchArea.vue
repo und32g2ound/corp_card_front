@@ -48,8 +48,7 @@ export default {
 .container {
   display: flex;
   justify-content: center;
-  // background-color: #263343;
-  padding: 20px 20px;
+  padding: 8px 20px;
 }
 
 .registration-button {

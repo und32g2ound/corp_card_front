@@ -81,6 +81,7 @@
 import fireStore from '@/mixins/fireStore';
 import utils from '@/utils/utils';
 import { cloneDeep } from 'lodash';
+import NProgress from 'nprogress';
 
 // NOTE: yu-dw 확인 후 원래 사용한게 더 좋으면 다시 바꿔주세요
 // lodash에 있는 cloneDeep이 완벽하게 별개 객체로 clone 해준다고 해서 씀
@@ -89,6 +90,12 @@ import { cloneDeep } from 'lodash';
 export default {
   name: 'PrintPage',
   mixins: [fireStore],
+  beforeRouteEnter(to, from, next) {
+    NProgress.start();
+    next(() => {
+      NProgress.done();
+    });
+  },
   data() {
     return {
       signTitle: [

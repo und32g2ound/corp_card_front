@@ -73,7 +73,7 @@
                 <button class="edit-btn" @click="editData(4)">수정완료</button>
               </td>
               <td v-else>
-                <span>{{popupData.amount | numberWithCommas}}</span>
+                <span>{{utils.numberWithCommas(popupData.amount)}}</span>
                 <button class="edit-btn" @click="editMode(4)">수정</button>
               </td>
             </tr>
