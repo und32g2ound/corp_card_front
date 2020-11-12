@@ -92,7 +92,7 @@
             </tr>
             <tr>
               <td class="title">잔액</td>
-              <td>{{popupData.balance | numberWithCommas}}</td>
+              <td>{{utils.numberWithCommas(popupData.balance)}}</td>
             </tr>
           </tbody>
         </table>
@@ -108,17 +108,16 @@
 <script>
 
 import fireStore from '@/mixins/fireStore';
+import utils from '@/utils/utils';
 
 export default {
   name: 'Popup',
   props: ['visible', 'popupData'],
   mixins: [fireStore],
-  filters: {
-    numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-  },
   data() {
     return {
       editIndex: null,
+      utils,
     };
   },
   watch: {

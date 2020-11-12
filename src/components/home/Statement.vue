@@ -60,40 +60,9 @@ export default {
       popupData: null,
     };
   },
-  filters: {
-    numberWithCommas: (n) => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-  },
   methods: {
     addCommas(event) {
       return event.key.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    },
-    getList() {
-      this.getHistory();
-    },
-    addUsage() {
-      if (!this.usedDate) {
-        alert('사용일시를 입력해주세요.');
-        return;
-      } if (!this.category) {
-        alert('분류를 선택해주세요.');
-        return;
-      } if (!this.amount) {
-        alert('사용금액을 입력해주세요.');
-        return;
-      }
-
-      const useObejct = {
-        usedDate: dayjs(this.usedDate).format('YYYY-MM-DD'),
-        category: this.category,
-        customer: this.customer,
-        purpose: this.purpose,
-        amount: this.amount,
-        memo: this.memo || '',
-        date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-        timeInMs: Date.now(), // time stamp
-      };
-
-      this.registration(useObejct);
     },
     onClick(item) {
       this.popupData = {

@@ -16,7 +16,6 @@ import utils from '@/utils/utils';
 
 export default {
   name: 'TableRow',
-  mixins: [utils],
   props: {
     item: {
       type: Object,
