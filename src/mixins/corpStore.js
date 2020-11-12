@@ -7,12 +7,14 @@ export default {
     ...mapState([
       'totalBalanceAmount',
       'historyList',
+      'searchHistoryList',
     ]),
   },
   methods: {
     ...mapMutations([
       'decrement',
       'reset',
+      'setSearchHistoryList',
     ]),
     ...mapActions([
       'initialize',

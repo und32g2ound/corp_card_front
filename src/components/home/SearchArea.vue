@@ -24,11 +24,12 @@
 </template>
 
 <script>
-import fireStore from '@/mixins/fireStore';
+// import fireStore from '@/mixins/fireStore';
+import corpStore from '@/mixins/corpStore';
 
 export default {
   name: 'SearchArea',
-  mixins: [fireStore],
+  mixins: [corpStore],
   data() {
     return {
       category: '전체',

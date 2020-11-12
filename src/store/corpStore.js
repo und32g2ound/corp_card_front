@@ -7,12 +7,22 @@ export default {
   state: {
     totalBalanceAmount: 0,
     historyList: [],
+    searchHistoryList: [],
   },
   mutations: {
     setHistoryList(state, payload) {
       // 최근 사용내역으로 정렬
       payload.historyList.sort((a, b) => b.timeInMs - a.timeInMs);
       state.historyList = payload.historyList;
+    },
+    setSearchHistoryList(state, payload) {
+      if (payload.category === '전체') {
+        state.searchHistoryList = state.historyList;
+      } else {
+        state.searchHistoryList = state.historyList.filter(
+          (info) => info.category === payload.category,
+        );
+      }
     },
     setTotalBalanceAmount(state, payload) {
       state.totalBalanceAmount = payload.totalBalanceAmount;
