@@ -48,7 +48,14 @@ export default {
       axios.post(`${appConfig.serverIP}/corp/setTotal`, {
         balance,
       }).then(() => {
-        commit('setTotalBalanceAmount', { totalBalanceAmount: MAX_LIMIT_A_MONTH });
+        commit('setTotalBalanceAmount', { totalBalanceAmount: balance });
+      });
+    },
+    updateTotalAmout({ commit }, balance) {
+      axios.post(`${appConfig.serverIP}/corp/updateTotal`, {
+        balance,
+      }).then(() => {
+        commit('setTotalBalanceAmount', { totalBalanceAmount: balance });
       });
     },
     getHistory({ state, commit }) {
@@ -88,7 +95,7 @@ export default {
       axios.post(`${appConfig.serverIP}/corp/registUsage`, {
         params,
       }).then(() => {
-        dispatch('setTotalAmout', balance);
+        dispatch('updateTotalAmout', balance);
         dispatch('getHistory');
       }).catch((err) => {
         console.error(err);
@@ -101,7 +108,7 @@ export default {
       axios.post(`${appConfig.serverIP}/corp/deleteUsage`, {
         params,
       }).then(() => {
-        dispatch('setTotalAmout', balance);
+        dispatch('updateTotalAmout', balance);
         dispatch('getHistory');
       }).catch((err) => {
         console.error(err);
@@ -116,7 +123,7 @@ export default {
       }).then(() => {
         if (editAmount) {
           balance = state.totalBalanceAmount + params.amount;
-          dispatch('setTotalAmout', balance);
+          dispatch('updateTotalAmout', balance);
         }
         dispatch('getHistory');
       }).catch((err) => {
