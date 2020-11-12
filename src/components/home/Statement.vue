@@ -32,7 +32,8 @@
 
 <script>
 
-import fireStore from '@/mixins/fireStore';
+// import common from '@/mixins/fireStore';
+import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import TableRow from '@/components/home/TableRow.vue';
 import popup from './Popup.vue';
@@ -46,7 +47,7 @@ export default {
   props: {
     msg: String,
   },
-  mixins: [fireStore],
+  mixins: [corpStore],
   data() {
     return {
       usedDate: '',
@@ -74,6 +75,7 @@ export default {
         amount: item.amount,
         balance: item.balance,
         memo: item.memo,
+        timeInMs: item.timeInMs,
       };
       this.visible = !this.visible;
     },

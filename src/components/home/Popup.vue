@@ -16,7 +16,7 @@
               <td class="title">사용일시</td>
               <td v-if="isEdit === 0">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(0)">수정완료</button>
               </td>
@@ -29,7 +29,7 @@
               <td class="title">사용 내역 분류</td>
               <td v-if="isEdit === 1">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(1)">수정완료</button>
               </td>
@@ -42,7 +42,7 @@
               <td class="title">고객사</td>
               <td v-if="isEdit === 2">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(2)">수정완료</button>
               </td>
@@ -55,7 +55,7 @@
               <td class="title">사용 목적 또는 사유</td>
               <td v-if="isEdit === 3">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(3)">수정완료</button>
               </td>
@@ -68,7 +68,7 @@
               <td class="title">사용금액</td>
               <td v-if="isEdit === 4">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(4)">수정완료</button>
               </td>
@@ -81,7 +81,7 @@
               <td class="title">비고</td>
               <td v-if="isEdit === 5">
                 <span>
-                  <input class="">
+                  <input class="" @input="editInputText($event)">
                 </span>
                 <button class="edit-btn" @click="editData(5)">수정완료</button>
               </td>
@@ -107,17 +107,19 @@
 
 <script>
 
-import fireStore from '@/mixins/fireStore';
+// import fireStore from '@/mixins/fireStore';
 import utils from '@/utils/utils';
+import corpStore from '@/mixins/corpStore';
 
 export default {
   name: 'Popup',
   props: ['visible', 'popupData'],
-  mixins: [fireStore],
+  mixins: [corpStore],
   data() {
     return {
       editIndex: null,
       utils,
+      inputText: '',
     };
   },
   watch: {
@@ -134,9 +136,44 @@ export default {
     },
   },
   methods: {
+    editInputText(e) {
+      this.inputText = e.target.value;
+    },
     editData(index) {
       console.log('index: ', index);
       // index에 따른 데이터 수정 case 생성 예정
+      const editColumn = {
+        columnName: '',
+        columnValue: '',
+        timeInMs: '',
+      };
+
+      switch (index) {
+        case 0:
+          editColumn.columnName = 'usedDate';
+          break;
+        case 1:
+          editColumn.columnName = 'category';
+          break;
+        case 2:
+          editColumn.columnName = 'customer';
+          break;
+        case 3:
+          editColumn.columnName = 'purpose';
+          break;
+        case 4:
+          editColumn.columnName = 'amount';
+          break;
+        case 5:
+          editColumn.columnName = 'memo';
+          break;
+        default:
+      }
+
+      editColumn.columnValue = this.inputText;
+      editColumn.timeInMs = this.popupData.timeInMs;
+
+      this.editColumn(editColumn);
     },
     editMode(index) {
       this.editIndex = index;
@@ -147,7 +184,7 @@ export default {
     deleteUsage() {
       const useObejct = {
         amount: this.popupData.amount,
-        date: this.popupData.date,
+        timeInMs: this.popupData.timeInMs,
       };
 
       this.deleteData(useObejct);

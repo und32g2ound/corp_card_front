@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import fireStore from '@/mixins/fireStore';
+// import fireStore from '@/mixins/fireStore';
+import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import Datepicker from 'vuejs-datepicker';
 import { ko } from 'vuejs-datepicker/dist/locale';
@@ -69,7 +70,7 @@ export default {
   components: {
     Datepicker,
   },
-  mixins: [fireStore],
+  mixins: [corpStore],
   data() {
     return {
       usedDate: '',

@@ -35,8 +35,10 @@ export default {
   },
   async beforeRouteEnter(to, from, next) {
     NProgress.start();
-    await index.dispatch('fireStore/initialize');
-    await index.dispatch('fireStore/getHistory');
+    // await index.dispatch('fireStore/initialize');
+    // await index.dispatch('fireStore/getHistory');
+    await index.dispatch('corpStore/initialize');
+    await index.dispatch('corpStore/getHistory');
     next(() => {
       NProgress.done();
     });
