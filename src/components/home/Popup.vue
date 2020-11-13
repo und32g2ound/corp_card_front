@@ -145,6 +145,7 @@ export default {
         columnName: '',
         columnValue: '',
         timeInMs: '',
+        changeBalance: 0,
       };
 
       switch (index) {
@@ -169,7 +170,19 @@ export default {
         default:
       }
 
-      editColumn.columnValue = this.inputText;
+      if (index === 4) {
+        if (this.popupData.amount > Number(this.inputText)) {
+          editColumn.changeBalance = this.popupData.amount - Number(this.inputText);
+        } else if (this.popupData.amount === Number(this.inputText)) {
+          editColumn.changeBalance = Number(this.inputText);
+        } else {
+          editColumn.changeBalance = this.popupData.amount - Number(this.inputText);
+        }
+        editColumn.columnValue = Number(this.inputText);
+      } else {
+        editColumn.columnValue = this.inputText;
+      }
+
       editColumn.timeInMs = this.popupData.timeInMs;
 
       this.editColumn(editColumn);

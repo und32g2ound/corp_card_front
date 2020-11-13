@@ -115,14 +115,11 @@ export default {
       });
     },
     editColumn({ state, dispatch }, params) {
-      const editAmount = params.amount;
-      let balance = 0;
-
       axios.post(`${appConfig.serverIP}/corp/editUsage`, {
         params,
       }).then(() => {
-        if (editAmount) {
-          balance = state.totalBalanceAmount + params.amount;
+        if (params.columnName === 'amount') {
+          const balance = state.totalBalanceAmount + params.changeBalance;
           dispatch('updateTotalAmout', balance);
         }
         dispatch('getHistory');
