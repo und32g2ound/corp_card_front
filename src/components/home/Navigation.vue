@@ -14,6 +14,7 @@
       <li><a href="#">BUSINESS</a></li>
       <li><a href="#">RECRUIT</a></li>
       <li><a href="#" @click="print">PREVIEW PRINT</a></li>
+      <li><a href="#" @click="logout">LOGOUT</a></li>
     </ul>
 
     <ul
@@ -37,6 +38,7 @@
 <script>
 import eventBus from '@/utils/eventBus';
 import { EVENTBUS_EVENT } from '@/config/constants';
+import authService from '@/plugins/auth';
 
 export default {
   name: 'Navigation',
@@ -51,6 +53,13 @@ export default {
       // 출력
       event.preventDefault();
       this.$router.push({ name: 'PrintPage' });
+    },
+    logout() {
+      // 로그아웃
+      authService.logout()
+        .then(() => {
+          this.$router.replace('/login');
+        });
     },
   },
 };
