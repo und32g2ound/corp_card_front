@@ -2,8 +2,8 @@
   <section class="form animated flipInX">
     <h2>Login To Your Account</h2>
     <form class="loginbox" autocomplete="off">
-      <input v-model="email" placeholder="E-mail" type="text" id="username" />
-      <input v-model="password" placeholder="Password" type="password" id="password" />
+      <input v-model="email" placeholder="E-mail" type="text" />
+      <input v-model="password" placeholder="Password" type="password" @keydown.enter="login" />
       <input type="button" class="submit" @click="login" value="Login" />
     </form>
   </section>
