@@ -13,8 +13,8 @@
       <li><a href="#">COMPANY</a></li>
       <li><a href="#">BUSINESS</a></li>
       <li><a href="#">RECRUIT</a></li>
-      <li><a href="#" @click="print">PREVIEW PRINT</a></li>
-      <li><a href="#" @click="logout">LOGOUT</a></li>
+      <li><a href="#" @click.prevent="print">PREVIEW PRINT</a></li>
+      <li><a href="#" @click.prevent="logout">LOGOUT</a></li>
     </ul>
 
     <ul
@@ -49,9 +49,8 @@ export default {
 
       eventBus.$emit(EVENTBUS_EVENT.TOGGLE_ACTIVE);
     },
-    print(event) {
+    print() {
       // 출력
-      event.preventDefault();
       this.$router.push({ name: 'PrintPage' });
     },
     logout() {
