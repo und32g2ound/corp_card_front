@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { MAX_LIMIT_A_MONTH } from '@/config/constants';
 import appConfig from '@/config/appConfig';
+import utils from '@/utils/utils';
 
 export default {
   namespaced: true,
@@ -72,7 +73,7 @@ export default {
           const balance = state.totalBalanceAmount;
 
           const usageObject = {
-            amount,
+            amount: utils.numberWithCommas(amount),
             balance,
             date,
             timeInMs,

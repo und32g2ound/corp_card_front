@@ -1,20 +1,33 @@
 <template>
-  <div id="app">
-    <!-- <router-link to="/"></router-link> -->
-    <router-view/>
-  </div>
+  <v-app>
+    <!-- nav bar -->
+  <Navigation></Navigation>
+
+    <!-- router-view -->
+    <v-main>
+      <router-view></router-view>
+    </v-main>
+
+    <!-- footer -->
+    <Footer></Footer>
+  </v-app>
 </template>
 
-<style lang="scss">
+<script>
 
-body {
-  margin: 0;
-  font-family: 'Source Sans Pro';
-}
+import Navigation from '@/components/home/Navigation.vue';
+import Footer from '@/components/home/Footer.vue';
 
-a {
-  text-decoration: none;
-  color: white;
-}
+export default {
+  name: 'App',
+  components: {
+    Navigation,
+    Footer,
+  },
+  data() {
+    return {
 
-</style>
+    };
+  },
+};
+</script>

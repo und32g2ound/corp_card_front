@@ -1,5 +1,6 @@
 export default {
   numberWithCommas: (n) => (n).toLocaleString(),
+  stringWithCommasToNumber: (n) => parseFloat(n.replace(/,/g, '')),
   converttimeInMsToDate: (ms, locale = 'ko') => {
     const date = new Date(ms);
     const options = {
