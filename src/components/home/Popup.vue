@@ -3,8 +3,9 @@
     v-if="visible" @click.self="handleWrapperClick">
     <div class="popup__dialog">
       <header class="popup__header">
-        <h5 class="title">사용내역 상세</h5>
+        <h5 class="header-title">Detail</h5>
       </header>
+      <hr class="line" />
       <div class="popup__body">
         <table>
           <tbody>
@@ -18,11 +19,11 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(0)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(0)" />
               </td>
               <td v-else>
                 <span>{{popupData.usedDate || ''}}</span>
-                <button class="edit-btn" @click="editMode(0)">수정</button>
+                <i class="far fa-edit edit-btn" @click="editMode(0)" />
               </td>
             </tr>
             <tr>
@@ -31,11 +32,11 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(1)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(1)" />
               </td>
               <td v-else>
-                <span>{{popupData.category || ''}}</span>
-                <button class="edit-btn" @click="editMode(1)">수정</button>
+                <span class="contents">{{popupData.category || ''}}</span>
+                <i class="far fa-edit edit-btn" @click="editMode(1)" />
               </td>
             </tr>
             <tr>
@@ -44,11 +45,11 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(2)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(2)" />
               </td>
               <td v-else>
-                <span>{{popupData.customer || ''}}</span>
-                <button class="edit-btn" @click="editMode(2)">수정</button>
+                <span class="contents">{{popupData.customer || ''}}</span>
+                <i class="far fa-edit edit-btn" @click="editMode(2)" />
               </td>
             </tr>
             <tr>
@@ -57,11 +58,11 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(3)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(3)" />
               </td>
               <td v-else>
-                <span>{{popupData.purpose || ''}}</span>
-                <button class="edit-btn" @click="editMode(3)">수정</button>
+                <span class="contents">{{popupData.purpose || ''}}</span>
+                <i class="far fa-edit edit-btn" @click="editMode(3)" />
               </td>
             </tr>
             <tr>
@@ -70,11 +71,11 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(4)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(4)" />
               </td>
               <td v-else>
-                <span>{{utils.numberWithCommas(popupData.amount)}}</span>
-                <button class="edit-btn" @click="editMode(4)">수정</button>
+                <span class="contents">{{utils.numberWithCommas(popupData.amount)}}</span>
+                <i class="far fa-edit edit-btn" @click="editMode(4)" />
               </td>
             </tr>
             <tr>
@@ -83,23 +84,25 @@
                 <span>
                   <input class="" @input="editInputText($event)">
                 </span>
-                <button class="edit-btn" @click="editData(5)">수정완료</button>
+                <i class="fas fa-check-circle edit-btn" @click="editData(5)" />
               </td>
               <td v-else>
-                <span>{{popupData.memo}}</span>
-                <button class="edit-btn" @click="editMode(5)">수정</button>
+                <span class="contents">{{popupData.memo}}</span>
+                <i class="far fa-edit edit-btn" @click="editMode(5)" />
               </td>
             </tr>
             <tr>
               <td class="title">잔액</td>
-              <td>{{utils.numberWithCommas(popupData.balance)}}</td>
+              <td class="contents">{{utils.numberWithCommas(popupData.balance)}}</td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="btn-area">
         <button class="footer-btn" @click="deleteUsage">삭제</button>
-        <button class="footer-btn" @click="$emit('update:visible', !visible)">닫기</button>
+        <button class="footer-btn" @click="$emit('update:visible', !visible)">
+          닫기
+        </button>
       </div>
     </div>
   </div>
@@ -207,6 +210,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url(https://fonts.googleapis.com/css?family=Arvo:700);
+@import url(https://fonts.googleapis.com/css?family=Seaweed+Script);
 $module: 'popup';
 
 .#{$module} {
@@ -242,6 +247,35 @@ $module: 'popup';
   }
 }
 
+/* 상당 영역 */
+.header-title {
+  width: 120px;
+  background-color: #0f9ad8;
+  font-weight: bold;
+  text-shadow:
+    -3px -3px 0 #222,
+    3px -3px 0 #222,
+    -3px 3px 0 #222,
+    3px 3px 0 #222;
+  line-height: 0.8em;
+  letter-spacing: 0.1em;
+  transform: scaleY(0.7);
+  -webkit-transform: scaleY(0.7);
+  -moz-transform: scaleY(0.7);
+  text-align: center;
+  font-family: "Seaweed Script";
+  color: #fff;
+  font-size: 40px;
+  position: relative;
+  margin: auto;
+}
+
+.line {
+  border: 1.5px solid #263343;
+  opacity: 0.8;
+}
+
+/* table 영역 */
 table {
   font-family: 'Source Sans Pro';
   border-collapse: collapse;
@@ -251,7 +285,7 @@ table {
 
 td, th {
   border: 1px solid #dddddd;
-  text-align: center;
+  text-align: right;
   padding: 8px;
 }
 
@@ -260,28 +294,41 @@ input {
 }
 
 .title {
+  background-color: #f4f4f4;
   text-align: center;
-  font-weight: bold;
-}
-.btn-area {
-  position: relative;
-  height: 50px;
-  margin: 10px;
-  text-align: center;
-}
-
-.footer-btn {
-  width: 50px;
-  margin: 10px;
-  font-size: 1em;
-  font-weight: bold;
-}
-.edit-btn {
-  margin-left: 10px;
+  font-size: 15px;
 }
 
 .contents {
   width: 60%;
+  font-size: 15px;
 }
 
+// 버튼 관련
+.edit-btn {
+  margin-left: 10px;
+}
+
+.btn-area {
+  position: relative;
+  height: 50px;
+  margin-top: 5px;
+  margin: 15px;
+  text-align: center;
+}
+
+.footer-btn {
+  width:90px;
+  background-color: #263343;
+  border: none;
+  color:#fff;
+  padding: 10px 0;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius:10px 0 10px 0;
+}
 </style>
