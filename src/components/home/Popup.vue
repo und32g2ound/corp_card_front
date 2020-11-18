@@ -30,7 +30,20 @@
               <td class="title">사용 내역 분류</td>
               <td v-if="isEdit === 1">
                 <span>
-                  <input class="" @input="editInputText($event)">
+                  <!-- input class="" @input="editInputText($event)" -->
+                  <select
+                    class="category"
+                    v-model="category"
+                  >
+                    <option value="" selected disabled hidden >분류선택</option>
+                    <option
+                      v-for="(item, index) in  categoryList"
+                      :value="item"
+                      :key="index"
+                    >
+                      {{item}}
+                    </option>
+                  </select>
                 </span>
                 <i class="fas fa-check-circle edit-btn" @click="editData(1)" />
               </td>
@@ -121,7 +134,9 @@ export default {
     return {
       editIndex: null,
       utils,
+      category: '',
       inputText: '',
+      categoryList: ['식사', '간식', '접대', '비품', '회식', '기타'],
     };
   },
   watch: {
@@ -182,13 +197,19 @@ export default {
           editColumn.changeBalance = this.popupData.amount - Number(this.inputText);
         }
         editColumn.columnValue = Number(this.inputText);
+      } else if (index === 1) {
+        // 분류 selectBox 처리
+        editColumn.columnValue = this.category;
       } else {
         editColumn.columnValue = this.inputText;
       }
 
       editColumn.timeInMs = this.popupData.timeInMs;
 
+      console.log('editColumn: ', editColumn);
       this.editColumn(editColumn);
+      this.editIndex = null;
+      // this.setSearchHistoryList({ category: '전체' });
     },
     editMode(index) {
       this.editIndex = index;

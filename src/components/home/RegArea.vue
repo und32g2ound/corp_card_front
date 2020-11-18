@@ -16,7 +16,7 @@
         v-model="category"
       >
         <option value="" selected disabled hidden >분류선택</option>
-        <option v-for="(item, index) in  categoryList" :value="index" :key="index">{{item}}</option>
+        <option v-for="(item, index) in  categoryList" :value="item" :key="index">{{item}}</option>
       </select>
 
       <input
@@ -109,33 +109,6 @@ export default {
     };
   },
   methods: {
-    getCategoryName(item) {
-      let categoryName = '';
-      switch (item) {
-        case 0:
-          categoryName = '식사';
-          break;
-        case 1:
-          categoryName = '간식';
-          break;
-        case 2:
-          categoryName = '접대';
-          break;
-        case 3:
-          categoryName = '비품';
-          break;
-        case 4:
-          categoryName = '회식';
-          break;
-        case 5:
-          categoryName = '기타';
-          break;
-        default:
-          categoryName = '기타';
-          break;
-      }
-      return categoryName;
-    },
     addUsage() {
       if (!this.usedDate || !this.category || !this.customer || !this.purpose || !this.amount) {
         this.$refs.invalidate.classList.toggle('active');
@@ -149,7 +122,7 @@ export default {
 
       const useObejct = {
         usedDate: dayjs(this.usedDate).format('YYYY-MM-DD'),
-        category: this.getCategoryName(this.category),
+        category: this.category,
         amount: +this.amount,
         customer: this.customer,
         purpose: this.purpose,
