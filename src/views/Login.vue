@@ -23,14 +23,12 @@
       </v-form>
     </v-card-text>
     <v-card-actions>
-      <v-btn
-        color="success"
-      >Register
+      <v-btn>
+        Register
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn
-      color="info"
-      >Login
+      <v-btn>
+        Login
       </v-btn>
     </v-card-actions>
   </v-card>

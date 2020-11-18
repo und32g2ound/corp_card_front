@@ -1,8 +1,6 @@
 <template>
   <v-app-bar
     app
-    color="primary"
-    dark
   >
     <v-toolbar-title>
       신기술 사업부 UI개발팀

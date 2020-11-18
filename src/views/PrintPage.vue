@@ -208,6 +208,7 @@ export default {
     font-size: 18.0pt;
     font-weight: 600;
     text-align: center;
+    color: black;
   }
 
   .sign {
@@ -226,6 +227,7 @@ export default {
       width: 8.2mm;
       height: 26mm;
       border-right: 1px black solid;
+      color: black;
     }
 
     .rightBox {
@@ -239,6 +241,7 @@ export default {
         width: 19.06mm;
         height: 26mm;
         border-right: 0.3mm black solid;
+        color: black;
         &:last-child {
           border-right: none;
         }
@@ -261,6 +264,7 @@ export default {
     border-top: 0.3mm black solid;
     border-bottom: 3px black double;
     background-color: #dcdcff;
+    color: black;
 
     .inBox {
       line-height: 8mm;
@@ -288,6 +292,7 @@ export default {
     .inBox {
       line-height: 7.5mm;
       font-size:9.0pt;
+      color: black
     }
   }
 

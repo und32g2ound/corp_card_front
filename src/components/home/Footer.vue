@@ -1,6 +1,5 @@
 <template>
   <v-footer
-    color="primary lighten-1"
     padless
   >
     <v-row
@@ -10,7 +9,7 @@
       <v-btn
         v-for="link in links"
         :key="`${link.label}-footer-link`"
-        color="white"
+
         text
         rounded
         class="my-2"
@@ -19,7 +18,7 @@
         {{ link.label }}
       </v-btn>
       <v-col
-        class="primary lighten-2 py-4 text-center white--text"
+        class="py-4 text-center"
         cols="12"
       >
         <strong>Since 1999 - {{ new Date().getFullYear() }}
@@ -28,8 +27,8 @@
             href="http://openobject.net/"
             text
             rounded
-            target="_black"
-            color="white"
+            target="_blank"
+
           >OPENOBJECT</v-btn>
           . All Rights reserved.
         </strong>

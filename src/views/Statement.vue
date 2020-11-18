@@ -140,7 +140,7 @@
           </v-card-text>
           <v-card-actions>
             <v-btn
-              color="success"
+
               @click="register"
             >Register
             </v-btn>
@@ -148,7 +148,7 @@
             <v-spacer></v-spacer>
 
             <v-btn
-              color="info"
+
               @click="initInputFields"
             >Reset
             </v-btn>
