@@ -7,7 +7,8 @@
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
               법인카드 사용내역서
             </v-card-title>
-            <v-alert dense outlined dismissible type="error" v-show="isLoadingMaxWait">
+            <v-alert dense outlined dismissible type="error"
+              v-show="historyList.length <= 0 && isLoadingMaxWait">
               님아 데이터를 가져오는데 <strong>최대대기 시간 2초</strong>가 초과됐습니다. <strong>새로고침</strong> 해주셈 ㄱㄱㄱㄱ
             </v-alert>
           </template>
@@ -67,7 +68,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-              <v-form>
+              <v-form ref="form" v-model="valid" lazy-validation>
                 <!-- 사용일시 -->
                 <v-menu
                   ref="menu"
@@ -113,18 +114,21 @@
                   filled
                   label="분류"
                   prepend-icon="mdi-sort-reverse-variant"
+                  :rules="categoryRules"
                 ></v-autocomplete>
 
-                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer"/>
+                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer"
+                  :rules="customerRules"/>
                 <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline"
-                  v-model="purpose"/>
-                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount"/>
+                  v-model="purpose" :rules="purposeRules"/>
+                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount"
+                  :rules="amountRules"/>
                 <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo"/>
               </v-form>
             </v-card-text>
 
             <v-card-actions>
-              <v-btn @click="register">Register</v-btn>
+              <v-btn @click="register" :disabled="!valid">Register</v-btn>
               <v-spacer></v-spacer>
               <v-btn @click="initInputFields">Reset</v-btn>
             </v-card-actions>
@@ -181,6 +185,11 @@ export default {
     menu: false,
     categoryList: ['식사', '간식', '접대', '비품', '회식', '기타'],
     isLoadingMaxWait: false,
+    categoryRules: [(v) => !!v || '분류 항목을 선택해 주세요'],
+    customerRules: [(v) => !!v || '고객사 항목을 입력해 주세요'],
+    purposeRules: [(v) => !!v || '사용목적 또는 사유(상세히) 항목을 입력해 주세요'],
+    amountRules: [(v) => !!v || '사용금액 항목을 입력해 주세요'],
+    valid: true,
     headers: [
       {
         text: '사용일시',
@@ -276,8 +285,13 @@ export default {
       this.purpose = '';
       this.amount = '';
       this.memo = '';
+
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
     },
     register() {
+      if (!this.$refs.form.validate()) return;
+
       const useObejct = {
         usedDate: this.usedDate,
         category: this.category,
