@@ -153,7 +153,7 @@ export default {
 
     // 메인 사용내역서는 최신순이고
     // 프린트용으로는 과거순으로 출력되야 하므로 역정렬 함
-    this.reversedHistoryList = cloneDeep(this.historyList).sort((a, b) => a.timeInMs - b.timeInMs);
+    this.reversedHistoryList = cloneDeep(this.historyList).sort((a, b) => Number(a.usedDate) - Number(b.usedDate));
 
     for (let i = 0; i < this.reversedHistoryList.length; i += 1) {
       const history = this.reversedHistoryList[i];

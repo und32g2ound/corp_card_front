@@ -254,7 +254,6 @@ export default {
       return utils.numberWithCommas(this.totalBalanceAmount);
     },
     getTotalUsedAmount() {
-      // eslint-disable-next-line max-len
       return utils.numberWithCommas(this.historyList.reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
     },
     getCategorySumList() {
@@ -263,7 +262,6 @@ export default {
 
         let list = [];
         if (filterdList) {
-          // eslint-disable-next-line max-len
           const sum = utils.numberWithCommas(filterdList.reduce((acc, item) => acc + utils.stringWithCommasToNumber(item.amount), 0));
           list = {
             category,
@@ -283,7 +281,7 @@ export default {
       this.category = '';
       this.customer = '';
       this.purpose = '';
-      this.amount = '';
+      this.amount = 0;
       this.memo = '';
 
       this.$refs.form.reset();
@@ -295,7 +293,7 @@ export default {
       const useObejct = {
         usedDate: this.usedDate,
         category: this.category,
-        amount: +this.amount,
+        amount: +(this.amount),
         customer: this.customer,
         purpose: this.purpose,
         memo: this.memo || '',
