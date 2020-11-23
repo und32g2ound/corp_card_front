@@ -1,5 +1,35 @@
 <template>
   <v-container>
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
+      <v-card>
+        <v-card-title class="headline grey">
+          상세 보기
+        </v-card-title>
+
+        <v-data-table
+          :headers="headers_dialog"
+          :items="dialogData"
+          hide-default-header
+          hide-default-footer
+          class="elevation-1"
+        />
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col cols=7>
         <v-tooltip bottom>
@@ -33,6 +63,7 @@
           :sort-by="['usedDate']"
           item-key="timeInMs"
           v-model="selected"
+          @click:row="onClick"
         >
           <template v-slot:top>
             <v-switch
@@ -236,6 +267,16 @@ export default {
         value: 'categorySum',
       },
     ],
+    headers_dialog: [
+      {
+        text: 'title',
+        align: 'start',
+        value: 'name',
+      },
+      { text: 'value', value: 'values' },
+    ],
+    dialog: false,
+    dialogData: [],
   }),
   created() {
     this.initialize();
@@ -303,6 +344,19 @@ export default {
 
       this.registration(useObejct);
       this.initInputFields();
+    },
+    onClick(data) {
+      console.log('onClick data: ', data);
+
+      this.dialogData = [
+        { name: '사용일시', values: data.usedDate },
+        { name: '분류', values: data.category },
+        { name: '고객사', values: data.customer },
+        { name: '사용목적 또는 사유', values: data.purpose },
+        { name: '사용금액', values: data.amount },
+        { name: '기타메모', values: data.memo },
+      ];
+      this.dialog = true;
     },
   },
 };
