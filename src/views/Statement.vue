@@ -60,7 +60,9 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
+              <v-btn text rounded><v-icon>mdi-arrow-left</v-icon></v-btn>
               법인카드 사용내역서
+              <v-btn text rounded><v-icon>mdi-arrow-right</v-icon></v-btn>
             </v-card-title>
             <v-alert dense outlined dismissible type="error"
               v-show="historyList.length <= 0 && isLoadingMaxWait">
@@ -101,21 +103,24 @@
         <div class="table-footer-prepend d-flex pl-2 align-center">
           <v-tooltip top>
             <template v-slot:activator="{ on }">
-              <v-btn
-                class="mx-2"
-                fab
-                dark
-                small
-                color="primary"
-                v-on="on"
-                @click="onButtonClick"
-              >
-                <v-icon dark>
-                  mdi-minus
-                </v-icon>
-              </v-btn>
+              <v-fab-transition>
+                <v-btn
+                  v-show="selected.length > 0"
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="error"
+                  v-on="on"
+                  @click="onButtonClick"
+                >
+                  <v-icon dark>
+                    mdi-minus
+                  </v-icon>
+                </v-btn>
+              </v-fab-transition>
             </template>
-            <span>삭제</span>
+            <span>선택항목 삭제</span>
           </v-tooltip>
         </div>
       </v-col>
