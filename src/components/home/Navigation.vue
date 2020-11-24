@@ -1,6 +1,7 @@
 <template>
   <v-app-bar
     app
+    id="navigation"
   >
     <v-toolbar-title>
       신기술 사업부 UI개발팀

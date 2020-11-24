@@ -167,6 +167,24 @@ export default {
       data[4].data = utils.numberWithCommas(history.amount);
       this.printData[i] = data;
     }
+    window.onbeforeprint = () => {
+      const navigation = document.getElementById('navigation');
+      const footer = document.getElementById('footer');
+      const vMain = document.getElementById('v-main');
+
+      navigation.style.display = 'none';
+      footer.style.display = 'none';
+      vMain.style.padding = '0px';
+    };
+    window.onafterprint = () => {
+      const navigation = document.getElementById('navigation');
+      const footer = document.getElementById('footer');
+      const vMain = document.getElementById('v-main');
+
+      navigation.style.display = 'block';
+      footer.style.display = 'block';
+      vMain.style.padding = '64px 0px 0px';
+    };
   },
 };
 </script>

@@ -1,6 +1,7 @@
 <template>
   <v-footer
     padless
+    id="footer"
   >
     <v-row
       justify="center"
