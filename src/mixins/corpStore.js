@@ -5,6 +5,7 @@ const { mapState, mapMutations, mapActions } = createNamespacedHelpers('corpStor
 export default {
   computed: {
     ...mapState([
+      'limitBalance',
       'totalBalanceAmount',
       'historyList',
       'searchHistoryList',
@@ -22,6 +23,7 @@ export default {
       'registration',
       'deleteData',
       'editColumn',
+      'updateLimitBalance',
     ]),
   },
 };

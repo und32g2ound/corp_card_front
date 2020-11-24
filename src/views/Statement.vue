@@ -129,16 +129,92 @@
       <v-col cols=1>
         <v-divider vertical class="pl-14"></v-divider>
       </v-col>
-
+      <v-col cols=4>
       <!-- 사용내역 입력란 -->
-      <v-row flex-direction="column">
-
         <v-col cols=12>
           <v-card>
             <v-card-title>Summary</v-card-title>
-            <v-divider></v-divider>
-            <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
-            <v-card-text>잔액 : {{ getTotalBalanceAmount }}원</v-card-text>
+            <v-card-actions>
+                <v-card-text>한도 총액 : {{ getLimitBalance }}원</v-card-text>
+                <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
+                <v-card-text>잔액: {{ getTotalBalanceAmount }}원</v-card-text>
+
+              <v-dialog
+                v-model="isUpdateTotalDialog"
+                persistent
+                max-width="300"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="primary"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="initModalUpdateTotal"
+                  >
+                    한도 변경하기
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">
+                    한도 변경하기
+                  </v-card-title>
+                  <v-form
+                    class="px-7"
+                    fluid
+                  >
+                    <v-row>
+                      <v-col
+                        cols="12"
+                        sm="4"
+                        md="4"
+                      >
+                        <v-checkbox
+                          v-model="isUpdateTotalCheckbox.add"
+                          label="추가"
+                          @change="changeTotalBalanceCheckBox(0, isUpdateTotalCheckbox.add)"
+                        ></v-checkbox>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="4"
+                        md="4"
+                      >
+                        <v-checkbox
+                          v-model="isUpdateTotalCheckbox.minus"
+                          label="삭제"
+                          @change="changeTotalBalanceCheckBox(1, isUpdateTotalCheckbox.minus)"
+                        ></v-checkbox>
+                      </v-col>
+                    </v-row>
+                    <v-text-field
+                      type="number"
+                      label="변경 금액"
+                      prepend-icon="mdi-currency-krw"
+                      v-model="changeBalance"
+                      :rules="[rules.loanMin(changeBalance, rules.minValue), rules.loanMax(changeBalance, rules.maxValue)]"
+                    />
+                  </v-form>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="updateTotalBalance(changeBalance)"
+                    >
+                      변경하기
+                    </v-btn>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="isUpdateTotalDialog = false"
+                    >
+                      취소하기
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-card-actions>
           </v-card>
         </v-col>
 
@@ -215,7 +291,7 @@
             </v-card-actions>
           </v-card>
         </v-col>
-      </v-row>
+      </v-col>
     </v-row>
 
     <!-- 분류별 합계 테이블 -->
@@ -328,6 +404,23 @@ export default {
     dialog: false,
     dialogData: [],
     snackbar: false,
+    currentMonth: new Date().toISOString().substr(0, 7),
+    isUpdateTotalDialog: false,
+    isUpdateTotalCheckbox: {
+      add: true,
+      minus: false,
+    },
+    changeBalance: '',
+    rules: {
+      loanMin(value, min) {
+        return (value || '') >= min || `최소금액 ${min}원`;
+      },
+      loanMax(value, max) {
+        return (value || '') <= max || `최대금액 ${max}원`;
+      },
+      minValue: 1,
+      maxValue: 3000000,
+    },
   }),
   created() {
     this.initialize();
@@ -341,6 +434,9 @@ export default {
   computed: {
     isLoading() {
       return (this.historyList.length <= 0 && !this.isLoadingMaxWait);
+    },
+    getLimitBalance() {
+      return utils.numberWithCommas(this.limitBalance);
     },
     getTotalBalanceAmount() {
       return utils.numberWithCommas(this.totalBalanceAmount);
@@ -409,19 +505,33 @@ export default {
       ];
       this.dialog = true;
     },
-    onButtonClick() {
-      console.log('onButtonClick data: ', this.selected);
-      this.snackbar = true;
+    initModalUpdateTotal() {
+      this.changeBalance = '';
+      this.isUpdateTotalCheckbox.add = true;
+      this.isUpdateTotalCheckbox.minus = false;
     },
-    onDelete() {
-      this.snackbar = false;
-
-      for (let i = 0; i < this.selected.length; i += 1) {
-        const useObejct = {
-          amount: utils.stringWithCommasToNumber(this.selected[i].amount, 0),
-          timeInMs: this.selected[i].timeInMs,
-        };
-        this.deleteData(useObejct);
+    changeTotalBalanceCheckBox(index, isState) {
+      if (index === 0) {
+        this.isUpdateTotalCheckbox.add = isState;
+        this.isUpdateTotalCheckbox.minus = !isState;
+      } else {
+        this.isUpdateTotalCheckbox.add = !isState;
+        this.isUpdateTotalCheckbox.minus = isState;
+      }
+    },
+    updateTotalBalance(changeBalance) {
+      if (changeBalance < this.rules.minValue) {
+        alert(`최저 입력 금액 : ${this.rules.minValue}원`);
+      } else if (changeBalance > this.rules.maxValue) {
+        alert(`최대 입력 금액 : ${this.rules.maxValue}원`);
+      } else {
+        this.isUpdateTotalDialog = false;
+        const index = Object.values(this.isUpdateTotalCheckbox).findIndex((item) => item === true);
+        const balance = Number(changeBalance);
+        this.updateLimitBalance({
+          limitBalance: index === 0 ? this.limitBalance + balance : this.limitBalance - balance,
+          balance: index === 0 ? this.totalBalanceAmount + balance : this.totalBalanceAmount - balance,
+        });
       }
     },
   },

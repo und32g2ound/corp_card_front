@@ -6,6 +6,7 @@ import utils from '@/utils/utils';
 export default {
   namespaced: true,
   state: {
+    limitBalance: 0,
     totalBalanceAmount: 0,
     historyList: [],
     searchHistoryList: [],
@@ -26,6 +27,9 @@ export default {
       }
     },
     setTotalBalanceAmount(state, payload) {
+      if (payload.limitBalance) {
+        state.limitBalance = payload.limitBalance;
+      }
       state.totalBalanceAmount = payload.totalBalanceAmount;
     },
   },
@@ -41,7 +45,7 @@ export default {
         if (!total || !total.balance) {
           dispatch('setTotalAmout', MAX_LIMIT_A_MONTH);
         } else {
-          commit('setTotalBalanceAmount', { totalBalanceAmount: total.balance });
+          commit('setTotalBalanceAmount', { totalBalanceAmount: total.balance, limitBalance: total.limitBalance });
         }
       });
     },
@@ -49,7 +53,7 @@ export default {
       axios.post(`${appConfig.serverIP}/corp/setTotal`, {
         balance,
       }).then(() => {
-        commit('setTotalBalanceAmount', { totalBalanceAmount: balance });
+        commit('setTotalBalanceAmount', { totalBalanceAmount: balance, limitBalance: balance });
       });
     },
     updateTotalAmout({ commit }, balance) {
@@ -126,6 +130,13 @@ export default {
         dispatch('getHistory');
       }).catch((err) => {
         console.error(err);
+      });
+    },
+    updateLimitBalance({ commit }, params) {
+      axios.post(`${appConfig.serverIP}/corp/updateLimit`, {
+        params,
+      }).then(() => {
+        commit('setTotalBalanceAmount', { limitBalance: params.limitBalance, totalBalanceAmount: params.balance });
       });
     },
   },
