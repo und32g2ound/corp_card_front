@@ -11,9 +11,17 @@
           color="primary"
           text
           v-bind="attrs"
-          @click="snackbar = false"
+          @click="onDelete"
         >
           OK
+        </v-btn>
+        <v-btn
+          color="primary"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          CLOSE
         </v-btn>
       </template>
     </v-snackbar>
@@ -107,7 +115,7 @@
                 </v-icon>
               </v-btn>
             </template>
-            <span>Delete Data</span>
+            <span>삭제</span>
           </v-tooltip>
         </div>
       </v-col>
@@ -399,8 +407,17 @@ export default {
     onButtonClick() {
       console.log('onButtonClick data: ', this.selected);
       this.snackbar = true;
+    },
+    onDelete() {
+      this.snackbar = false;
 
-      // TODO: 삭제 처리 예정
+      for (let i = 0; i < this.selected.length; i += 1) {
+        const useObejct = {
+          amount: utils.stringWithCommasToNumber(this.selected[i].amount, 0),
+          timeInMs: this.selected[i].timeInMs,
+        };
+        this.deleteData(useObejct);
+      }
     },
   },
 };
