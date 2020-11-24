@@ -1,5 +1,22 @@
 <template>
   <v-container>
+    <!-- 삭제 확인 -->
+    <v-snackbar
+      v-model="snackbar"
+      :centered="true"
+    >
+      선택한 항목을 삭제하시겠습니까?
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="primary"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          OK
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-dialog
       v-model="dialog"
       width="500"
@@ -73,6 +90,26 @@
             ></v-switch>
           </template>
         </v-data-table>
+        <div class="table-footer-prepend d-flex pl-2 align-center">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                small
+                color="primary"
+                v-on="on"
+                @click="onButtonClick"
+              >
+                <v-icon dark>
+                  mdi-minus
+                </v-icon>
+              </v-btn>
+            </template>
+            <span>Delete Data</span>
+          </v-tooltip>
+        </div>
       </v-col>
 
       <!-- 구분선 -->
@@ -277,6 +314,7 @@ export default {
     ],
     dialog: false,
     dialogData: [],
+    snackbar: false,
   }),
   created() {
     this.initialize();
@@ -358,10 +396,19 @@ export default {
       ];
       this.dialog = true;
     },
+    onButtonClick() {
+      console.log('onButtonClick data: ', this.selected);
+      this.snackbar = true;
+
+      // TODO: 삭제 처리 예정
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
+.table-footer-prepend {
+  margin-top: -58px;
+  height: 58px;
+}
 </style>
