@@ -60,9 +60,13 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
-              <v-btn text rounded><v-icon>mdi-arrow-left</v-icon></v-btn>
-              법인카드 사용내역서
-              <v-btn text rounded><v-icon>mdi-arrow-right</v-icon></v-btn>
+              <v-btn text rounded :disabled="isDisabled('LEFT')">
+                <v-icon>mdi-arrow-left</v-icon>
+              </v-btn>
+                법인카드 사용내역서
+              <v-btn text rounded :disabled="isDisabled('RIGHT')">
+                <v-icon>mdi-arrow-right</v-icon>
+              </v-btn>
             </v-card-title>
             <v-alert dense outlined dismissible type="error"
               v-show="historyList.length <= 0 && isLoadingMaxWait">
@@ -78,7 +82,7 @@
         <!-- 사용내역 테이블 -->
         <v-data-table
           :headers="headers"
-          :items="historyList"
+          :items="getFilteredHistoryList"
           :items-per-page="10"
           class="elevation-2"
           height="570"
@@ -353,15 +357,25 @@ export default {
     dialog: false,
     dialogData: [],
     snackbar: false,
+    selectDate: '', // 월별 데이터 조회를 위한 선택 date
+    curDate: '', // 월별 데이터 조회를 위한 현재 date
+    filteredHistoryList: [],
   }),
   created() {
     this.initialize();
+    this.curDate = new Date();
+    this.selectDate = this.curDate;
   },
   mounted() {
     this.getHistory();
     setTimeout(() => {
       this.isLoadingMaxWait = true;
     }, 2000);
+  },
+  watch: {
+    historyList() {
+      this.setFilteredHistoryList();
+    },
   },
   computed: {
     isLoading() {
@@ -393,6 +407,9 @@ export default {
       });
 
       return result;
+    },
+    getFilteredHistoryList() {
+      return this.filteredHistoryList;
     },
   },
   methods: {
@@ -451,6 +468,50 @@ export default {
         };
         this.deleteData(useObejct);
       }
+    },
+    setFilteredHistoryList() {
+      /* 현재 선택한 월에 맞는 data를 필터링 */
+      const listData = this.historyList;
+      const resultData = [];
+      let usedMonth;
+      let selectMonth;
+
+      for (let i = 0; i < listData.length; i += 1) {
+        usedMonth = dayjs(listData[i].usedDate).month();
+        selectMonth = dayjs(this.selectDate).month();
+
+        if (usedMonth === selectMonth) {
+          resultData.push(listData[i]);
+        }
+      }
+
+      this.filteredHistoryList = resultData;
+    },
+    isDisabled(direction) {
+      let result = false;
+
+      if (direction === 'LEFT') {
+        const dayjsCurDate = dayjs(this.curDate);
+        const dayjsSelectDate = dayjs(this.selectDate);
+        const targetMonth = dayjsCurDate.subtract(2, 'month').format('YYYYMM');
+
+        if (targetMonth < dayjsSelectDate.format('YYYYMM')) {
+          result = false;
+        } else {
+          result = true;
+        }
+      } else if (direction === 'RIGHT') {
+        const curMonth = this.curDate.getMonth();
+        const selectMonth = this.selectDate.getMonth();
+
+        if (curMonth === selectMonth) {
+          result = true;
+        } else {
+          result = false;
+        }
+      }
+
+      return result;
     },
   },
 };
