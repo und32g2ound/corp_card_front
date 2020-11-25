@@ -16,6 +16,7 @@
       v-model="isUpdateTotalDialog"
       persistent
       max-width="300"
+      @click:outside="closeDialog"
     >
       <v-card>
         <v-card-title class="headline">
@@ -140,6 +141,10 @@ export default {
     },
   },
   methods: {
+    closeDialog() {
+      this.isConfirmDialog = false;
+      this.isUpdateTotalDialog = false;
+    },
     initUpdateBalanceDialog() {
       this.isUpdateTotalDialog = true;
       this.isUpdateTotalCheckbox = {
