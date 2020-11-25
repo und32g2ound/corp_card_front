@@ -8,20 +8,28 @@
       no-gutters
     >
       <v-btn
-        v-for="link in links"
-        :key="`${link.label}-footer-link`"
-
         text
         rounded
-        class="my-2"
-        :to="link.routePath"
-      >
-        {{ link.label }}
-      </v-btn>
-      <v-col
-        class="py-4 text-center"
-        cols="12"
-      >
+        to="/">Home</v-btn>
+      <v-btn
+        text
+        rounded
+        to="/statement">Statement</v-btn>
+      <v-btn
+        text
+        rounded
+        to="/print">Print</v-btn>
+      <v-btn
+        v-show="getIsLogin"
+        text
+        rounded
+        @click="logout"
+        >Logout</v-btn>
+
+        <v-col
+          class="py-4 text-center"
+          cols="12"
+        >
         <strong>Since 1999 - {{ new Date().getFullYear() }}
           By.
           <v-btn
@@ -39,24 +47,41 @@
 </template>
 
 <script>
+import authService from '@/plugins/auth';
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
+
 export default {
   name: 'Footer',
+  created() {
+    eventBus.$on(EVENTBUS_EVENT.TOGGLE_LOGOUT, this.toggleLogOut);
+  },
+  beforeDestroy() {
+    eventBus.$off(EVENTBUS_EVENT.TOGGLE_LOGOUT, this.toggleLogOut);
+  },
+  computed: {
+    getIsLogin() {
+      return this.isLogin;
+    },
+  },
+  mounted() {
+    this.toggleLogOut();
+  },
+  methods: {
+    logout() {
+      authService.logout()
+        .then(() => {
+          eventBus.$emit(EVENTBUS_EVENT.TOGGLE_LOGOUT);
+          this.$router.replace('/login');
+        });
+    },
+    toggleLogOut() {
+      this.isLogin = authService.authenticated();
+    },
+  },
   data() {
     return {
-      links: [
-        {
-          label: 'Home',
-          routePath: '/',
-        },
-        {
-          label: 'Statement',
-          routePath: '/statement',
-        },
-        {
-          label: 'Print',
-          routePath: '/print',
-        },
-      ],
+      isLogin: false,
     };
   },
 };

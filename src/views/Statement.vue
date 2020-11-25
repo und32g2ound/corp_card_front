@@ -534,6 +534,21 @@ export default {
         });
       }
     },
+    onButtonClick() {
+      console.log('onButtonClick data: ', this.selected);
+      this.snackbar = true;
+    },
+    onDelete() {
+      this.snackbar = false;
+
+      for (let i = 0; i < this.selected.length; i += 1) {
+        const useObejct = {
+          amount: utils.stringWithCommasToNumber(this.selected[i].amount, 0),
+          timeInMs: this.selected[i].timeInMs,
+        };
+        this.deleteData(useObejct);
+      }
+    },
   },
 };
 </script>

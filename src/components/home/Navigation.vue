@@ -21,11 +21,53 @@
       text
       rounded
       to="/print">Print</v-btn>
+    <v-btn
+      v-show="getIsLogin"
+      text
+      rounded
+      @click="logout"
+      >Logout</v-btn>
   </v-app-bar>
 </template>
 
 <script>
+import authService from '@/plugins/auth';
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
+
 export default {
+  name: 'Navigation',
+  data() {
+    return {
+      isLogin: false,
+    };
+  },
+  computed: {
+    getIsLogin() {
+      return this.isLogin;
+    },
+  },
+  created() {
+    eventBus.$on(EVENTBUS_EVENT.TOGGLE_LOGOUT, this.toggleLogOut);
+  },
+  beforeDestroy() {
+    eventBus.$off(EVENTBUS_EVENT.TOGGLE_LOGOUT, this.toggleLogOut);
+  },
+  mounted() {
+    this.toggleLogOut();
+  },
+  methods: {
+    logout() {
+      authService.logout()
+        .then(() => {
+          eventBus.$emit(EVENTBUS_EVENT.TOGGLE_LOGOUT);
+          this.$router.replace('/login');
+        });
+    },
+    toggleLogOut() {
+      this.isLogin = authService.authenticated();
+    },
+  },
 
 };
 </script>

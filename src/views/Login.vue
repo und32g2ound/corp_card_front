@@ -5,15 +5,17 @@
   >
     <v-card-title>
       <h1 class="display-1">Login</h1>
-      <v-card-subtitle>아직 로그인 기능없음!</v-card-subtitle>
+      <v-card-subtitle>a@a.com / 123456</v-card-subtitle>
     </v-card-title>
     <v-card-text>
       <v-form>
         <v-text-field
-          label="UserName"
+          v-model="email"
+          label="Email"
           prepend-icon="mdi-account-circle"
         />
         <v-text-field
+          v-model="password"
           label="Password"
           :type="showPassword ? 'text' : 'password'"
           prepend-icon="mdi-lock"
@@ -23,11 +25,8 @@
       </v-form>
     </v-card-text>
     <v-card-actions>
-      <v-btn>
-        Register
-      </v-btn>
       <v-spacer></v-spacer>
-      <v-btn>
+      <v-btn @click="login">
         Login
       </v-btn>
     </v-card-actions>
@@ -35,11 +34,29 @@
 </template>
 
 <script>
+import authService from '@/plugins/auth';
+import eventBus from '@/utils/eventBus';
+import { EVENTBUS_EVENT } from '@/config/constants';
+
 export default {
+  name: 'Login',
   data() {
     return {
       showPassword: false,
+      email: '',
+      password: '',
     };
+  },
+  methods: {
+    login() {
+      authService.login(this.email, this.password)
+        .then((user) => {
+          if (user) {
+            eventBus.$emit(EVENTBUS_EVENT.TOGGLE_LOGOUT);
+            this.$router.replace('/statement');
+          }
+        });
+    },
   },
 };
 </script>
