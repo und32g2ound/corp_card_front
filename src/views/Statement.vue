@@ -56,7 +56,7 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols=7>
+      <v-col lg=6 xs=12>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
@@ -125,25 +125,45 @@
         </div>
       </v-col>
 
-      <!-- 구분선 -->
-      <v-col cols=1>
-        <v-divider vertical class="pl-14"></v-divider>
-      </v-col>
-      <v-col cols=4>
+      <v-col lg=6 xs=12>
       <!-- 사용내역 입력란 -->
-        <v-col cols=12>
+        <v-col>
           <v-card>
-            <v-card-title>Summary</v-card-title>
-            <v-card-actions>
-              <v-card-text>한도 총액 : {{ getLimitBalance }}원</v-card-text>
-              <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
-              <v-card-text>잔액: {{ getTotalBalanceAmount }}원</v-card-text>
+            <v-card-title>Summary
               <UpdateLimitBalance/>
-            </v-card-actions>
+            </v-card-title>
+            <v-divider></v-divider>
+          </v-card>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    한도총액
+                  </th>
+                  <th class="text-left">
+                    사용 총합계
+                  </th>
+                  <th class="text-left">
+                    잔액
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ getLimitBalance }}원</td>
+                  <td>{{ getTotalUsedAmount }}원</td>
+                  <td>{{ getTotalBalanceAmount }}원</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          <v-card>
+
           </v-card>
         </v-col>
 
-        <v-col cols=12>
+        <v-col>
           <v-card>
             <v-card-title>
               <h5 class="display-5">사용내역 입력</h5>
@@ -210,9 +230,9 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-btn @click="register" :disabled="!valid">Register</v-btn>
+              <v-btn @click="register" :disabled="!valid">등록</v-btn>
               <v-spacer></v-spacer>
-              <v-btn @click="initInputFields">Reset</v-btn>
+              <v-btn @click="initInputFields">입력초기화</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -221,7 +241,7 @@
 
     <!-- 분류별 합계 테이블 -->
     <v-row class="px-2 py-3">
-      <v-col cols="7">
+      <v-col lg=6 xs=12>
         <v-card>
           <v-card-title>
             <h5 class="display-5">분류별 합계</h5>
