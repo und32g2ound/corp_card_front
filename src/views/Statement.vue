@@ -135,85 +135,10 @@
           <v-card>
             <v-card-title>Summary</v-card-title>
             <v-card-actions>
-                <v-card-text>한도 총액 : {{ getLimitBalance }}원</v-card-text>
-                <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
-                <v-card-text>잔액: {{ getTotalBalanceAmount }}원</v-card-text>
-
-              <v-dialog
-                v-model="isUpdateTotalDialog"
-                persistent
-                max-width="300"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="initModalUpdateTotal"
-                  >
-                    한도 변경하기
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="headline">
-                    한도 변경하기
-                  </v-card-title>
-                  <v-form
-                    class="px-7"
-                    fluid
-                  >
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        sm="4"
-                        md="4"
-                      >
-                        <v-checkbox
-                          v-model="isUpdateTotalCheckbox.add"
-                          label="추가"
-                          @change="changeTotalBalanceCheckBox(0, isUpdateTotalCheckbox.add)"
-                        ></v-checkbox>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        sm="4"
-                        md="4"
-                      >
-                        <v-checkbox
-                          v-model="isUpdateTotalCheckbox.minus"
-                          label="삭제"
-                          @change="changeTotalBalanceCheckBox(1, isUpdateTotalCheckbox.minus)"
-                        ></v-checkbox>
-                      </v-col>
-                    </v-row>
-                    <v-text-field
-                      type="number"
-                      label="변경 금액"
-                      prepend-icon="mdi-currency-krw"
-                      v-model="changeBalance"
-                      :rules="[rules.loanMin(changeBalance, rules.minValue), rules.loanMax(changeBalance, rules.maxValue)]"
-                    />
-                  </v-form>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="primary"
-                      text
-                      @click="updateTotalBalance(changeBalance)"
-                    >
-                      변경하기
-                    </v-btn>
-                    <v-btn
-                      color="primary"
-                      text
-                      @click="isUpdateTotalDialog = false"
-                    >
-                      취소하기
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              <v-card-text>한도 총액 : {{ getLimitBalance }}원</v-card-text>
+              <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
+              <v-card-text>잔액: {{ getTotalBalanceAmount }}원</v-card-text>
+              <UpdateLimitBalance/>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -324,10 +249,14 @@
 import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import utils from '@/utils/utils';
+import UpdateLimitBalance from './dialog/UpdateLimitBalance.vue';
 
 export default {
   name: 'Statement',
   mixins: [corpStore],
+  components: {
+    UpdateLimitBalance,
+  },
   data: () => ({
     loadingText: '님아 사용내역을 가져오고 있습니다.. 인내심을 가지고 잠시만 기다려 주셈~ ㅋㅋㅋ',
     selected: [],
@@ -404,23 +333,6 @@ export default {
     dialog: false,
     dialogData: [],
     snackbar: false,
-    currentMonth: new Date().toISOString().substr(0, 7),
-    isUpdateTotalDialog: false,
-    isUpdateTotalCheckbox: {
-      add: true,
-      minus: false,
-    },
-    changeBalance: '',
-    rules: {
-      loanMin(value, min) {
-        return (value || '') >= min || `최소금액 ${min}원`;
-      },
-      loanMax(value, max) {
-        return (value || '') <= max || `최대금액 ${max}원`;
-      },
-      minValue: 1,
-      maxValue: 3000000,
-    },
   }),
   created() {
     this.initialize();
@@ -504,35 +416,6 @@ export default {
         { name: '기타메모', values: data.memo },
       ];
       this.dialog = true;
-    },
-    initModalUpdateTotal() {
-      this.changeBalance = '';
-      this.isUpdateTotalCheckbox.add = true;
-      this.isUpdateTotalCheckbox.minus = false;
-    },
-    changeTotalBalanceCheckBox(index, isState) {
-      if (index === 0) {
-        this.isUpdateTotalCheckbox.add = isState;
-        this.isUpdateTotalCheckbox.minus = !isState;
-      } else {
-        this.isUpdateTotalCheckbox.add = !isState;
-        this.isUpdateTotalCheckbox.minus = isState;
-      }
-    },
-    updateTotalBalance(changeBalance) {
-      if (changeBalance < this.rules.minValue) {
-        alert(`최저 입력 금액 : ${this.rules.minValue}원`);
-      } else if (changeBalance > this.rules.maxValue) {
-        alert(`최대 입력 금액 : ${this.rules.maxValue}원`);
-      } else {
-        this.isUpdateTotalDialog = false;
-        const index = Object.values(this.isUpdateTotalCheckbox).findIndex((item) => item === true);
-        const balance = Number(changeBalance);
-        this.updateLimitBalance({
-          limitBalance: index === 0 ? this.limitBalance + balance : this.limitBalance - balance,
-          balance: index === 0 ? this.totalBalanceAmount + balance : this.totalBalanceAmount - balance,
-        });
-      }
     },
     onButtonClick() {
       console.log('onButtonClick data: ', this.selected);
