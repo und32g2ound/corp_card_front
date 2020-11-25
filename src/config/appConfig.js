@@ -7,7 +7,7 @@ const appConfig = {
    * 배포 버전은 IPTV DEV FTP 서버인 http://114.202.216.45 환경으로 설정
    */
   serverIP: LOCAL_DEV ? 'http://localhost:3001' : 'http://114.202.216.45:3001',
-  isLogin: true, // 개발용 인증 여부
+  isLogin: false, // 개발용 인증 여부
 };
 
 export default appConfig;

@@ -13,7 +13,7 @@ const config = {
 };
 
 firebase.initializeApp(config);
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 const authService = {
   firebase,
