@@ -10,12 +10,14 @@
         <v-card-subtitle>a@a.com / 123456</v-card-subtitle>
       </v-card-title>
       <v-card-text>
-        <v-form>
+        <v-form v-model="valid" lazy-validation ref="form">
           <v-text-field
             v-model="email"
             label="Email"
             prepend-icon="mdi-account-circle"
             @keyup.enter="login"
+            :rules="emailRules"
+            required
           />
           <v-text-field
             v-model="password"
@@ -25,6 +27,8 @@
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"
             @keyup.enter="login"
+            :rules="passwordRules"
+            required
           />
         </v-form>
       </v-card-text>
@@ -38,7 +42,7 @@
 
     <v-row class="flex-column" justify="center" align="center" v-else>
       <v-img
-        src="@/assets/images/login.jpg"
+        src="@/assets/images/goback_simpson.gif"
         max-width="920"
         max-height="460"
         class="mt-5"
@@ -64,6 +68,15 @@ export default {
       showPassword: false,
       email: '',
       password: '',
+      valid: true,
+      emailRules: [
+        (v) => !!v || 'E-mail 필수입력.',
+        (v) => /.+@.+\..+/.test(v) || 'E-mail형식에 맞게 입력해주세요 (abc@abc.com)',
+      ],
+      passwordRules: [
+        (v) => !!v || 'Password 필수입력.',
+        (v) => (v && v.length >= 6) || 'Password는 최소 6자리 이상입니다.',
+      ],
     };
   },
   computed: {
@@ -76,6 +89,10 @@ export default {
   },
   methods: {
     login() {
+      if (!this.validate()) {
+        return;
+      }
+
       authService.login(this.email, this.password)
         .then((user) => {
           if (user) {
@@ -83,6 +100,9 @@ export default {
             this.$router.replace('/statement');
           }
         });
+    },
+    validate() {
+      return this.$refs.form.validate();
     },
   },
 };
