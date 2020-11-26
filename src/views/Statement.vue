@@ -60,11 +60,17 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
-              <v-btn text rounded :disabled="isDisabled('LEFT')">
+              <v-btn text rounded
+                :disabled="isDisabled('LEFT')"
+                @click="onArrowClick('LEFT')"
+              >
                 <v-icon>mdi-arrow-left</v-icon>
               </v-btn>
                 법인카드 사용내역서
-              <v-btn text rounded :disabled="isDisabled('RIGHT')">
+              <v-btn text rounded
+                :disabled="isDisabled('RIGHT')"
+                @click="onArrowClick('RIGHT')"
+              >
                 <v-icon>mdi-arrow-right</v-icon>
               </v-btn>
             </v-card-title>
@@ -363,7 +369,7 @@ export default {
   }),
   created() {
     this.initialize();
-    this.curDate = new Date();
+    this.curDate = dayjs(new Date());
     this.selectDate = this.curDate;
   },
   mounted() {
@@ -374,6 +380,9 @@ export default {
   },
   watch: {
     historyList() {
+      this.setFilteredHistoryList();
+    },
+    selectDate() {
       this.setFilteredHistoryList();
     },
   },
@@ -491,18 +500,16 @@ export default {
       let result = false;
 
       if (direction === 'LEFT') {
-        const dayjsCurDate = dayjs(this.curDate);
-        const dayjsSelectDate = dayjs(this.selectDate);
-        const targetMonth = dayjsCurDate.subtract(2, 'month').format('YYYYMM');
+        const targetMonth = this.curDate.subtract(2, 'month').format('YYYYMM');
 
-        if (targetMonth < dayjsSelectDate.format('YYYYMM')) {
+        if (targetMonth < this.selectDate.format('YYYYMM')) {
           result = false;
         } else {
           result = true;
         }
       } else if (direction === 'RIGHT') {
-        const curMonth = this.curDate.getMonth();
-        const selectMonth = this.selectDate.getMonth();
+        const curMonth = this.curDate.month();
+        const selectMonth = this.selectDate.month();
 
         if (curMonth === selectMonth) {
           result = true;
@@ -512,6 +519,14 @@ export default {
       }
 
       return result;
+    },
+    onArrowClick(direction) {
+      console.log('onArrowClick: ', direction);
+      if (direction === 'LEFT') {
+        this.selectDate = this.selectDate.subtract(1, 'month');
+      } else if (direction === 'RIGHT') {
+        this.selectDate = this.selectDate.add(1, 'month');
+      }
     },
   },
 };
