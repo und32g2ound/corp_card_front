@@ -15,6 +15,7 @@
             v-model="email"
             label="Email"
             prepend-icon="mdi-account-circle"
+            @keyup.enter="login"
           />
           <v-text-field
             v-model="password"
@@ -23,6 +24,7 @@
             prepend-icon="mdi-lock"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"
+            @keyup.enter="login"
           />
         </v-form>
       </v-card-text>
@@ -34,43 +36,20 @@
       </v-card-actions>
     </v-card>
 
-  <v-row class="flex-column" justify="center" align="center" v-else>
-    <v-img
-      src="@/assets/images/login.jpg"
-      max-width="920"
-      max-height="460"
-      class="mt-5"
-    >
-    </v-img>
-    <v-card-title>
-      {{ getLoginAccount }} 계정으로 로그인 됨
-    </v-card-title>
-    <v-card-text>
-      <v-form>
-        <v-text-field
-          v-model="email"
-          label="Email"
-          prepend-icon="mdi-account-circle"
-          @keyup.enter="login"
-        />
-        <v-text-field
-          v-model="password"
-          label="Password"
-          :type="showPassword ? 'text' : 'password'"
-          prepend-icon="mdi-lock"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append="showPassword = !showPassword"
-          @keyup.enter="login"
-        />
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn @click="login">
-        Login
-      </v-btn>
-    </v-card-actions>
-  </v-row>
+    <v-row class="flex-column" justify="center" align="center" v-else>
+      <v-img
+        src="@/assets/images/login.jpg"
+        max-width="920"
+        max-height="460"
+        class="mt-5"
+      >
+      </v-img>
+      <v-card-title>
+        {{ getLoginAccount }} 계정으로 로그인 됨
+      </v-card-title>
+    </v-row>
+
+  </fragment>
 </template>
 
 <script>
@@ -89,7 +68,6 @@ export default {
   },
   computed: {
     isLogin() {
-      console.log(authService.user.email);
       return authService.authenticated();
     },
     getLoginAccount() {
