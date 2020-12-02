@@ -188,7 +188,7 @@ export default {
     getSelectedMonthHistoryList() {
       let resultData = [];
 
-      if (!this.historyList) {
+      if (!this.historyList.length) {
         return resultData;
       }
       const selectedMonth = this.selectDate.month();
