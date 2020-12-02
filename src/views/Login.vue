@@ -90,6 +90,8 @@ export default {
   methods: {
     login() {
       if (!this.validate()) {
+        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
         return;
       }
 
