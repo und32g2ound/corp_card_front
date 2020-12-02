@@ -142,7 +142,7 @@ export default {
   created() {
     // 프린트 페이지에서 browser refresh하는 경우 home으로 routing
     const selectedMonthHistoryList = this.getSelectedMonthHistoryList();
-    if (!this.historyList || !selectedMonthHistoryList.length) this.$router.push({ name: 'Home' });
+    if (!selectedMonthHistoryList.length) this.$router.push({ name: 'Home' });
 
     for (let i = 0; i < 25; i += 1) {
       const data = cloneDeep(this.tableData);
@@ -186,8 +186,13 @@ export default {
   },
   methods: {
     getSelectedMonthHistoryList() {
+      let resultData = [];
+
+      if (!this.historyList) {
+        return resultData;
+      }
       const selectedMonth = this.selectDate.month();
-      const resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === selectedMonth);
+      resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === selectedMonth);
 
       return resultData;
     },
