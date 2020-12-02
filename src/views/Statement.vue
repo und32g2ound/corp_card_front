@@ -74,6 +74,7 @@
                 <v-icon>mdi-arrow-right</v-icon>
               </v-btn>
             </v-card-title>
+            <v-card-title class="justify-center">( {{getSelectedMonth}} )</v-card-title>
             <v-alert dense outlined dismissible type="error"
               v-show="historyList.length <= 0 && isLoadingMaxWait">
               님아 데이터를 가져오는데 <strong>최대대기 시간 2초</strong>가 초과됐습니다. <strong>새로고침</strong> 해주셈 ㄱㄱㄱㄱ
@@ -162,7 +163,7 @@
               <tbody>
                 <tr>
                   <td>{{ getLimitBalance }}원</td>
-                  <td>{{ getTotalUsedAmount }}원</td>
+                  <td>{{ getTotalUsedAmountOfCurrentMonth }}원</td>
                   <td>{{ getTotalBalanceAmount }}원</td>
                 </tr>
               </tbody>
@@ -363,14 +364,13 @@ export default {
     dialog: false,
     dialogData: [],
     snackbar: false,
-    selectDate: '', // 월별 데이터 조회를 위한 선택 date
     curDate: '', // 월별 데이터 조회를 위한 현재 date
     filteredHistoryList: [],
   }),
   created() {
     this.initialize();
     this.curDate = dayjs(new Date());
-    this.selectDate = this.curDate;
+    this.setSelectDate({ selectDate: this.curDate });
   },
   mounted() {
     this.getHistory();
@@ -396,12 +396,13 @@ export default {
     getTotalBalanceAmount() {
       return utils.numberWithCommas(this.totalBalanceAmount);
     },
-    getTotalUsedAmount() {
-      return utils.numberWithCommas(this.historyList.reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
+    getTotalUsedAmountOfCurrentMonth() {
+      // 현재 '월'에 대한 사용합계 반환
+      return utils.numberWithCommas(this.getCurrentMonthHistoryList().reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
     },
     getCategorySumList() {
       const result = this.categoryList.map((category) => {
-        const filterdList = this.historyList.filter((i) => i.category === category);
+        const filterdList = this.getFilteredHistoryList.filter((i) => i.category === category);
 
         let list = [];
         if (filterdList) {
@@ -419,6 +420,9 @@ export default {
     },
     getFilteredHistoryList() {
       return this.filteredHistoryList;
+    },
+    getSelectedMonth() {
+      return this.selectDate.format('YYYY년 MM월');
     },
   },
   methods: {
@@ -521,12 +525,21 @@ export default {
       return result;
     },
     onArrowClick(direction) {
-      console.log('onArrowClick: ', direction);
+      let selectDate = null;
       if (direction === 'LEFT') {
-        this.selectDate = this.selectDate.subtract(1, 'month');
+        selectDate = this.selectDate.subtract(1, 'month');
+        this.setSelectDate({ selectDate });
       } else if (direction === 'RIGHT') {
-        this.selectDate = this.selectDate.add(1, 'month');
+        selectDate = this.selectDate.add(1, 'month');
+        this.setSelectDate({ selectDate });
       }
+    },
+    // 사용 내역 중 현재 '월'의 사용내역을 필터링한다
+    getCurrentMonthHistoryList() {
+      const currentMonth = dayjs().month();
+      const resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === currentMonth);
+
+      return resultData;
     },
   },
 };

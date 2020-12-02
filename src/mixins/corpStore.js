@@ -9,6 +9,7 @@ export default {
       'totalBalanceAmount',
       'historyList',
       'searchHistoryList',
+      'selectDate',
     ]),
   },
   methods: {
@@ -16,6 +17,7 @@ export default {
       'decrement',
       'reset',
       'setSearchHistoryList',
+      'setSelectDate',
     ]),
     ...mapActions([
       'initialize',
