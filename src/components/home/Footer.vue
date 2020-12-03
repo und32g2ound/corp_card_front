@@ -16,6 +16,7 @@
         rounded
         to="/statement">Statement</v-btn>
       <v-btn
+        v-if="!checkIsMobileDevice"
         text
         rounded
         to="/print">Print</v-btn>
@@ -50,6 +51,7 @@
 import authService from '@/plugins/auth';
 import eventBus from '@/utils/eventBus';
 import { EVENTBUS_EVENT } from '@/config/constants';
+import utils from '@/utils/utils';
 
 export default {
   name: 'Footer',
@@ -62,6 +64,9 @@ export default {
   computed: {
     getIsLogin() {
       return this.isLogin;
+    },
+    checkIsMobileDevice() {
+      return utils.isMobileDevice();
     },
   },
   mounted() {

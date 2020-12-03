@@ -16,4 +16,10 @@ export default {
 
     return result;
   },
+  isMobileDevice() {
+    if (navigator.userAgent.indexOf('Mobile') > 0) {
+      return true;
+    }
+    return false;
+  },
 };
