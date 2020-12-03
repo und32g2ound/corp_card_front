@@ -2,6 +2,7 @@
   <v-footer
     padless
     id="footer"
+    color="secondary"
   >
     <v-row
       justify="center"
@@ -10,36 +11,38 @@
       <v-btn
         text
         rounded
-        to="/">Home</v-btn>
+        to="/">
+        <span class="white--text">Home</span></v-btn>
       <v-btn
         text
         rounded
-        to="/statement">Statement</v-btn>
+        to="/statement">
+        <span class="white--text">Statement</span></v-btn>
       <v-btn
         v-if="!checkIsMobileDevice"
         text
         rounded
-        to="/print">Print</v-btn>
+        to="/print">
+        <span class="white--text">Print</span></v-btn>
       <v-btn
         v-show="getIsLogin"
         text
         rounded
-        @click="logout"
-        >Logout</v-btn>
+        @click="logout">
+        <span class="white--text">Logout</span></v-btn>
 
         <v-col
           class="py-4 text-center"
           cols="12"
         >
-        <strong>Since 1999 - {{ new Date().getFullYear() }}
+        <strong class="white--text">Since 1999 - {{ new Date().getFullYear() }}
           By.
           <v-btn
             href="http://openobject.net/"
             text
             rounded
             target="_blank"
-
-          >OPENOBJECT</v-btn>
+          ><span class="white--text">OPENOBJECT</span></v-btn>
           . All Rights reserved.
         </strong>
       </v-col>

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <!-- 삭제 확인 -->
     <v-snackbar
       v-model="snackbar"
@@ -30,7 +30,7 @@
       width="500"
     >
       <v-card>
-        <v-card-title class="headline grey">
+        <v-card-title class="headline blue">
           상세 보기
         </v-card-title>
 
@@ -169,9 +169,6 @@
               </tbody>
             </template>
           </v-simple-table>
-          <v-card>
-
-          </v-card>
         </v-col>
 
         <v-col>

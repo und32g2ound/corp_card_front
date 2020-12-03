@@ -52,6 +52,16 @@
         {{ getLoginAccount }} 계정으로 로그인 됨
       </v-card-title>
     </v-row>
+    <v-row class="flex-column" justify="center" align="center">
+      <v-switch
+        v-model="$vuetify.theme.dark"
+        hint=""
+        :label="getSwitchLabel"
+        persistent-hint
+        color="accent"
+        :append-icon="getSwitchIconName"
+      ></v-switch>
+      </v-row>
 
   </fragment>
 </template>
@@ -77,6 +87,7 @@ export default {
         (v) => !!v || 'Password 필수입력.',
         (v) => (v && v.length >= 6) || 'Password는 최소 6자리 이상입니다.',
       ],
+
     };
   },
   computed: {
@@ -85,6 +96,12 @@ export default {
     },
     getLoginAccount() {
       return authService.user.email;
+    },
+    getSwitchLabel() {
+      return !this.$vuetify.theme.dark ? '다크 모드로 보기' : '라이트 모드로 보기';
+    },
+    getSwitchIconName() {
+      return !this.$vuetify.theme.dark ? 'mdi-weather-night' : 'mdi-white-balance-sunny';
     },
   },
   methods: {

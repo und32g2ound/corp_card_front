@@ -1,8 +1,7 @@
 <template>
-  <v-app>
+  <v-app v>
     <!-- nav bar -->
   <Navigation></Navigation>
-
     <!-- router-view -->
     <v-main id="v-main">
       <router-view></router-view>
@@ -10,6 +9,7 @@
 
     <!-- footer -->
     <Footer></Footer>
+
   </v-app>
 </template>
 

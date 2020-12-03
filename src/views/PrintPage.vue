@@ -336,12 +336,14 @@ export default {
       width: 141mm;
       line-height: 7mm;
       font-size:10.0pt;
+      color: black;
     }
 
     .amountPrice {
       width: 27mm;
       line-height: 7mm;
       font-size:10.0pt;
+      color: black;
     }
   }
 
@@ -350,12 +352,14 @@ export default {
     line-height: 12mm;
     font-size:10.0pt;
     text-align: center;
+    color: black;
   }
 }
 
 .bottom {
   text-align: right;
   font-size:10.0pt;
+  color: black;
 }
 
 @page {
