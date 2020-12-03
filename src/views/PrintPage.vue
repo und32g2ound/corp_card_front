@@ -64,7 +64,7 @@
           합 계
         </div>
         <div class="amountPrice">
-          {{ totalAmount }}
+          {{ getTotalAmount }}
         </div>
       </div>
 
@@ -134,7 +134,6 @@ export default {
         },
       ],
       printData: [],
-      totalAmount: 0,
       approver: '',
       reversedHistoryList: [],
     };
@@ -151,7 +150,7 @@ export default {
 
     // 메인 사용내역서는 최신순이고
     // 프린트용으로는 과거순으로 출력되야 하므로 역정렬 함
-    this.reversedHistoryList = cloneDeep(selectedMonthHistoryList).sort((a, b) => Number(a.usedDate) - Number(b.usedDate));
+    this.reversedHistoryList = cloneDeep(selectedMonthHistoryList).sort((a, b) => Number(dayjs(a.usedDate).valueOf()) - Number(dayjs(b.usedDate).valueOf()));
 
     for (let i = 0; i < this.reversedHistoryList.length; i += 1) {
       const history = this.reversedHistoryList[i];
@@ -195,6 +194,11 @@ export default {
       resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === selectedMonth);
 
       return resultData;
+    },
+  },
+  computed: {
+    getTotalAmount() {
+      return utils.numberWithCommas(this.reversedHistoryList.reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
     },
   },
 };

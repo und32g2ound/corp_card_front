@@ -99,6 +99,7 @@
           show-select
           :singleSelect="!multiSelect"
           :sort-by="['usedDate']"
+          sort-desc
           item-key="timeInMs"
           v-model="selected"
           @click:row="onClick"
@@ -230,7 +231,7 @@
                 <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer"
                   :rules="customerRules"/>
                 <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline"
-                  v-model="purpose" :rules="purposeRules"/>
+                  v-model="purpose"/>
                 <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount"
                   :rules="amountRules"/>
                 <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo"/>
@@ -301,14 +302,14 @@ export default {
     isLoadingMaxWait: false,
     categoryRules: [(v) => !!v || '분류 항목을 선택해 주세요'],
     customerRules: [(v) => !!v || '고객사 항목을 입력해 주세요'],
-    purposeRules: [(v) => !!v || '사용목적 또는 사유(상세히) 항목을 입력해 주세요'],
+    // purposeRules: [(v) => !!v || '사용목적 또는 사유(상세히) 항목을 입력해 주세요'],
     amountRules: [(v) => !!v || '사용금액 항목을 입력해 주세요'],
     valid: true,
     headers: [
       {
         text: '사용일시',
         align: 'center',
-        sortable: true,
+        sortable: false,
         value: 'usedDate',
       },
       {
@@ -494,7 +495,6 @@ export default {
           resultData.push(listData[i]);
         }
       }
-
       this.filteredHistoryList = resultData;
     },
     isDisabled(direction) {

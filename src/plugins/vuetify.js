@@ -6,8 +6,8 @@ import colors from 'vuetify/lib/util/colors';
 Vue.use(Vuetify);
 
 export default new Vuetify({
-  // theme: { dark: true },
   theme: {
+    dark: true,
     themes: {
       light: {
         primary: '#2E509D',
