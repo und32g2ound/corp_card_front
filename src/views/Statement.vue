@@ -76,8 +76,8 @@
             </v-card-title>
             <v-card-title class="justify-center">( {{getSelectedMonth}} )</v-card-title>
             <v-alert dense outlined dismissible type="error"
-              v-show="historyList.length <= 0 && isLoadingMaxWait">
-              님아 데이터를 가져오는데 <strong>최대대기 시간 2초</strong>가 초과됐습니다. <strong>새로고침</strong> 해주셈 ㄱㄱㄱㄱ
+              v-show="isLoadingMaxWait">
+              <strong>사용내역 데이터 조회가 지연되고 있습니다.</strong> Browser를 <strong>새로고침</strong> 해주세요.
             </v-alert>
           </template>
           <span>사용내역 항목을 클릭하면 상세내역 확인 가능합니다.</span>
@@ -287,7 +287,7 @@ export default {
     UpdateLimitBalance,
   },
   data: () => ({
-    loadingText: '님아 사용내역을 가져오고 있습니다.. 인내심을 가지고 잠시만 기다려 주셈~ ㅋㅋㅋ',
+    loadingText: '사용내역을 가져오고 있습니다.. 잠시만 기다려 주세요.',
     selected: [],
     multiSelect: false,
     todayDate: new Date().toISOString().substr(0, 10),
