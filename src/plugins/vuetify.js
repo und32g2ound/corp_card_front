@@ -19,6 +19,7 @@ export default new Vuetify({
         primary: '#121212',
         secondary: '#121212',
         accent: '#2196f3',
+        textField: '#fff',
       },
     },
   },

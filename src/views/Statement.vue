@@ -198,6 +198,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :color="getTextFieldColor"
                     ></v-text-field>
                   </template>
                   <v-date-picker
@@ -226,15 +227,16 @@
                   label="분류"
                   prepend-icon="mdi-sort-reverse-variant"
                   :rules="categoryRules"
+                  :color="getTextFieldColor"
                 ></v-autocomplete>
 
-                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer"
+                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer" :color="getTextFieldColor"
                   :rules="customerRules"/>
-                <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline"
+                <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline" :color="getTextFieldColor"
                   v-model="purpose"/>
-                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount"
+                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount" :color="getTextFieldColor"
                   :rules="amountRules"/>
-                <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo"/>
+                <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo" :color="getTextFieldColor"/>
               </v-form>
             </v-card-text>
 
@@ -421,6 +423,9 @@ export default {
     },
     getSelectedMonth() {
       return this.selectDate.format('YYYY년 MM월');
+    },
+    getTextFieldColor() {
+      return !this.$vuetify.theme.dark ? 'primary' : 'textField';
     },
   },
   methods: {
