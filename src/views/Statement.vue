@@ -376,7 +376,7 @@ export default {
   mounted() {
     this.getHistory();
     this.timeOutId = setTimeout(() => {
-      this.isLoadingMaxWait = true;
+      this.isLoadingMaxWait = false;
     }, 3000);
   },
   watch: {
