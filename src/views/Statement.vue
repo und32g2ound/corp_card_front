@@ -77,7 +77,7 @@
             <v-card-title class="justify-center">( {{getSelectedMonth}} )</v-card-title>
             <v-alert dense outlined dismissible type="error"
               v-show="isLoadingMaxWait">
-              <strong>사용내역 데이터 조회가 지연되고 있습니다.</strong> Browser를 <strong>새로고침</strong> 해주세요.
+              <strong>이번달 사용내역이 존재하지 않습니다.</strong>
             </v-alert>
           </template>
           <span>사용내역 항목을 클릭하면 상세내역 확인 가능합니다.</span>
@@ -366,6 +366,7 @@ export default {
     snackbar: false,
     curDate: '', // 월별 데이터 조회를 위한 현재 date
     filteredHistoryList: [],
+    timeOutId: null,
   }),
   created() {
     this.initialize();
@@ -374,9 +375,9 @@ export default {
   },
   mounted() {
     this.getHistory();
-    setTimeout(() => {
+    this.timeOutId = setTimeout(() => {
       this.isLoadingMaxWait = true;
-    }, 2000);
+    }, 3000);
   },
   watch: {
     historyList() {
@@ -419,7 +420,9 @@ export default {
       return result;
     },
     getFilteredHistoryList() {
-      return this.filteredHistoryList;
+      const { filteredHistoryList } = this;
+      if (filteredHistoryList.length) clearTimeout(this.timeOutId);
+      return filteredHistoryList;
     },
     getSelectedMonth() {
       return this.selectDate.format('YYYY년 MM월');
