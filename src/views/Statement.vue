@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <!-- 삭제 확인 -->
     <v-snackbar
       v-model="snackbar"
@@ -30,7 +30,7 @@
       width="500"
     >
       <v-card>
-        <v-card-title class="headline grey">
+        <v-card-title class="headline blue">
           상세 보기
         </v-card-title>
 
@@ -56,17 +56,28 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col cols=7>
+      <v-col lg=6 xs=12>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-card-title class="justify-center" v-bind="attrs" v-on="on">
-              <v-btn text rounded><v-icon>mdi-arrow-left</v-icon></v-btn>
-              법인카드 사용내역서
-              <v-btn text rounded><v-icon>mdi-arrow-right</v-icon></v-btn>
+              <v-btn text rounded
+                :disabled="isDisabled('LEFT')"
+                @click="onArrowClick('LEFT')"
+              >
+                <v-icon>mdi-arrow-left</v-icon>
+              </v-btn>
+                법인카드 사용내역서
+              <v-btn text rounded
+                :disabled="isDisabled('RIGHT')"
+                @click="onArrowClick('RIGHT')"
+              >
+                <v-icon>mdi-arrow-right</v-icon>
+              </v-btn>
             </v-card-title>
+            <v-card-title class="justify-center">( {{getSelectedMonth}} )</v-card-title>
             <v-alert dense outlined dismissible type="error"
-              v-show="historyList.length <= 0 && isLoadingMaxWait">
-              님아 데이터를 가져오는데 <strong>최대대기 시간 2초</strong>가 초과됐습니다. <strong>새로고침</strong> 해주셈 ㄱㄱㄱㄱ
+              v-show="isLoadingMaxWait">
+              <strong>이번달 사용내역이 존재하지 않습니다.</strong>
             </v-alert>
           </template>
           <span>사용내역 항목을 클릭하면 상세내역 확인 가능합니다.</span>
@@ -78,7 +89,7 @@
         <!-- 사용내역 테이블 -->
         <v-data-table
           :headers="headers"
-          :items="historyList"
+          :items="getFilteredHistoryList"
           :items-per-page="10"
           class="elevation-2"
           height="570"
@@ -88,6 +99,7 @@
           show-select
           :singleSelect="!multiSelect"
           :sort-by="['usedDate']"
+          sort-desc
           item-key="timeInMs"
           v-model="selected"
           @click:row="onClick"
@@ -125,100 +137,42 @@
         </div>
       </v-col>
 
-      <!-- 구분선 -->
-      <v-col cols=1>
-        <v-divider vertical class="pl-14"></v-divider>
-      </v-col>
-      <v-col cols=4>
+      <v-col lg=6 xs=12>
       <!-- 사용내역 입력란 -->
-        <v-col cols=12>
+        <v-col>
           <v-card>
-            <v-card-title>Summary</v-card-title>
-            <v-card-actions>
-                <v-card-text>한도 총액 : {{ getLimitBalance }}원</v-card-text>
-                <v-card-text>사용 총합계 : {{ getTotalUsedAmount }}원</v-card-text>
-                <v-card-text>잔액: {{ getTotalBalanceAmount }}원</v-card-text>
-
-              <v-dialog
-                v-model="isUpdateTotalDialog"
-                persistent
-                max-width="300"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="initModalUpdateTotal"
-                  >
-                    한도 변경하기
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title class="headline">
-                    한도 변경하기
-                  </v-card-title>
-                  <v-form
-                    class="px-7"
-                    fluid
-                  >
-                    <v-row>
-                      <v-col
-                        cols="12"
-                        sm="4"
-                        md="4"
-                      >
-                        <v-checkbox
-                          v-model="isUpdateTotalCheckbox.add"
-                          label="추가"
-                          @change="changeTotalBalanceCheckBox(0, isUpdateTotalCheckbox.add)"
-                        ></v-checkbox>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        sm="4"
-                        md="4"
-                      >
-                        <v-checkbox
-                          v-model="isUpdateTotalCheckbox.minus"
-                          label="삭제"
-                          @change="changeTotalBalanceCheckBox(1, isUpdateTotalCheckbox.minus)"
-                        ></v-checkbox>
-                      </v-col>
-                    </v-row>
-                    <v-text-field
-                      type="number"
-                      label="변경 금액"
-                      prepend-icon="mdi-currency-krw"
-                      v-model="changeBalance"
-                      :rules="[rules.loanMin(changeBalance, rules.minValue), rules.loanMax(changeBalance, rules.maxValue)]"
-                    />
-                  </v-form>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="primary"
-                      text
-                      @click="updateTotalBalance(changeBalance)"
-                    >
-                      변경하기
-                    </v-btn>
-                    <v-btn
-                      color="primary"
-                      text
-                      @click="isUpdateTotalDialog = false"
-                    >
-                      취소하기
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-card-actions>
+            <v-card-title>Summary
+              <UpdateLimitBalance/>
+            </v-card-title>
+            <v-divider></v-divider>
           </v-card>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    한도총액
+                  </th>
+                  <th class="text-left">
+                    사용 총합계
+                  </th>
+                  <th class="text-left">
+                    잔액
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ getLimitBalance }}원</td>
+                  <td>{{ getTotalUsedAmountOfCurrentMonth }}원</td>
+                  <td>{{ getTotalBalanceAmount }}원</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-col>
 
-        <v-col cols=12>
+        <v-col>
           <v-card>
             <v-card-title>
               <h5 class="display-5">사용내역 입력</h5>
@@ -244,6 +198,7 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
+                      :color="getTextFieldColor"
                     ></v-text-field>
                   </template>
                   <v-date-picker
@@ -272,22 +227,23 @@
                   label="분류"
                   prepend-icon="mdi-sort-reverse-variant"
                   :rules="categoryRules"
+                  :color="getTextFieldColor"
                 ></v-autocomplete>
 
-                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer"
+                <v-text-field label="고객사" prepend-icon="mdi-target" v-model="customer" :color="getTextFieldColor"
                   :rules="customerRules"/>
-                <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline"
-                  v-model="purpose" :rules="purposeRules"/>
-                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount"
+                <v-text-field label="사용목적 또는 사유(상세히)" prepend-icon="mdi-note-text-outline" :color="getTextFieldColor"
+                  v-model="purpose"/>
+                <v-text-field label="사용금액" prepend-icon="mdi-currency-krw" v-model="amount" :color="getTextFieldColor"
                   :rules="amountRules"/>
-                <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo"/>
+                <v-text-field label="기타(메모)" prepend-icon="mdi-note-plus-outline" v-model="memo" :color="getTextFieldColor"/>
               </v-form>
             </v-card-text>
 
             <v-card-actions>
-              <v-btn @click="register" :disabled="!valid">Register</v-btn>
+              <v-btn @click="register" :disabled="!valid">등록</v-btn>
               <v-spacer></v-spacer>
-              <v-btn @click="initInputFields">Reset</v-btn>
+              <v-btn @click="initInputFields">입력초기화</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -296,7 +252,7 @@
 
     <!-- 분류별 합계 테이블 -->
     <v-row class="px-2 py-3">
-      <v-col cols="7">
+      <v-col lg=6 xs=12>
         <v-card>
           <v-card-title>
             <h5 class="display-5">분류별 합계</h5>
@@ -324,12 +280,16 @@
 import corpStore from '@/mixins/corpStore';
 import dayjs from 'dayjs';
 import utils from '@/utils/utils';
+import UpdateLimitBalance from './dialog/UpdateLimitBalance.vue';
 
 export default {
   name: 'Statement',
   mixins: [corpStore],
+  components: {
+    UpdateLimitBalance,
+  },
   data: () => ({
-    loadingText: '님아 사용내역을 가져오고 있습니다.. 인내심을 가지고 잠시만 기다려 주셈~ ㅋㅋㅋ',
+    loadingText: '사용내역을 가져오고 있습니다.. 잠시만 기다려 주세요.',
     selected: [],
     multiSelect: false,
     todayDate: new Date().toISOString().substr(0, 10),
@@ -344,14 +304,14 @@ export default {
     isLoadingMaxWait: false,
     categoryRules: [(v) => !!v || '분류 항목을 선택해 주세요'],
     customerRules: [(v) => !!v || '고객사 항목을 입력해 주세요'],
-    purposeRules: [(v) => !!v || '사용목적 또는 사유(상세히) 항목을 입력해 주세요'],
+    // purposeRules: [(v) => !!v || '사용목적 또는 사유(상세히) 항목을 입력해 주세요'],
     amountRules: [(v) => !!v || '사용금액 항목을 입력해 주세요'],
     valid: true,
     headers: [
       {
         text: '사용일시',
         align: 'center',
-        sortable: true,
+        sortable: false,
         value: 'usedDate',
       },
       {
@@ -404,32 +364,28 @@ export default {
     dialog: false,
     dialogData: [],
     snackbar: false,
-    currentMonth: new Date().toISOString().substr(0, 7),
-    isUpdateTotalDialog: false,
-    isUpdateTotalCheckbox: {
-      add: true,
-      minus: false,
-    },
-    changeBalance: '',
-    rules: {
-      loanMin(value, min) {
-        return (value || '') >= min || `최소금액 ${min}원`;
-      },
-      loanMax(value, max) {
-        return (value || '') <= max || `최대금액 ${max}원`;
-      },
-      minValue: 1,
-      maxValue: 3000000,
-    },
+    curDate: '', // 월별 데이터 조회를 위한 현재 date
+    filteredHistoryList: [],
+    timeOutId: null,
   }),
   created() {
     this.initialize();
+    this.curDate = dayjs(new Date());
+    this.setSelectDate({ selectDate: this.curDate });
   },
   mounted() {
     this.getHistory();
-    setTimeout(() => {
+    this.timeOutId = setTimeout(() => {
       this.isLoadingMaxWait = true;
-    }, 2000);
+    }, 3000);
+  },
+  watch: {
+    historyList() {
+      this.setFilteredHistoryList();
+    },
+    selectDate() {
+      this.setFilteredHistoryList();
+    },
   },
   computed: {
     isLoading() {
@@ -441,12 +397,13 @@ export default {
     getTotalBalanceAmount() {
       return utils.numberWithCommas(this.totalBalanceAmount);
     },
-    getTotalUsedAmount() {
-      return utils.numberWithCommas(this.historyList.reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
+    getTotalUsedAmountOfCurrentMonth() {
+      // 현재 '월'에 대한 사용합계 반환
+      return utils.numberWithCommas(this.getCurrentMonthHistoryList().reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
     },
     getCategorySumList() {
       const result = this.categoryList.map((category) => {
-        const filterdList = this.historyList.filter((i) => i.category === category);
+        const filterdList = this.getFilteredHistoryList.filter((i) => i.category === category);
 
         let list = [];
         if (filterdList) {
@@ -461,6 +418,17 @@ export default {
       });
 
       return result;
+    },
+    getFilteredHistoryList() {
+      const { filteredHistoryList } = this;
+      if (filteredHistoryList.length) clearTimeout(this.timeOutId);
+      return filteredHistoryList;
+    },
+    getSelectedMonth() {
+      return this.selectDate.format('YYYY년 MM월');
+    },
+    getTextFieldColor() {
+      return !this.$vuetify.theme.dark ? 'primary' : 'textField';
     },
   },
   methods: {
@@ -505,35 +473,6 @@ export default {
       ];
       this.dialog = true;
     },
-    initModalUpdateTotal() {
-      this.changeBalance = '';
-      this.isUpdateTotalCheckbox.add = true;
-      this.isUpdateTotalCheckbox.minus = false;
-    },
-    changeTotalBalanceCheckBox(index, isState) {
-      if (index === 0) {
-        this.isUpdateTotalCheckbox.add = isState;
-        this.isUpdateTotalCheckbox.minus = !isState;
-      } else {
-        this.isUpdateTotalCheckbox.add = !isState;
-        this.isUpdateTotalCheckbox.minus = isState;
-      }
-    },
-    updateTotalBalance(changeBalance) {
-      if (changeBalance < this.rules.minValue) {
-        alert(`최저 입력 금액 : ${this.rules.minValue}원`);
-      } else if (changeBalance > this.rules.maxValue) {
-        alert(`최대 입력 금액 : ${this.rules.maxValue}원`);
-      } else {
-        this.isUpdateTotalDialog = false;
-        const index = Object.values(this.isUpdateTotalCheckbox).findIndex((item) => item === true);
-        const balance = Number(changeBalance);
-        this.updateLimitBalance({
-          limitBalance: index === 0 ? this.limitBalance + balance : this.limitBalance - balance,
-          balance: index === 0 ? this.totalBalanceAmount + balance : this.totalBalanceAmount - balance,
-        });
-      }
-    },
     onButtonClick() {
       console.log('onButtonClick data: ', this.selected);
       this.snackbar = true;
@@ -548,6 +487,64 @@ export default {
         };
         this.deleteData(useObejct);
       }
+    },
+    setFilteredHistoryList() {
+      /* 현재 선택한 월에 맞는 data를 필터링 */
+      const listData = this.historyList;
+      const resultData = [];
+      let usedMonth;
+      let selectMonth;
+
+      for (let i = 0; i < listData.length; i += 1) {
+        usedMonth = dayjs(listData[i].usedDate).month();
+        selectMonth = dayjs(this.selectDate).month();
+
+        if (usedMonth === selectMonth) {
+          resultData.push(listData[i]);
+        }
+      }
+      this.filteredHistoryList = resultData;
+    },
+    isDisabled(direction) {
+      let result = false;
+
+      if (direction === 'LEFT') {
+        const targetMonth = this.curDate.subtract(2, 'month').format('YYYYMM');
+
+        if (targetMonth < this.selectDate.format('YYYYMM')) {
+          result = false;
+        } else {
+          result = true;
+        }
+      } else if (direction === 'RIGHT') {
+        const curMonth = this.curDate.month();
+        const selectMonth = this.selectDate.month();
+
+        if (curMonth === selectMonth) {
+          result = true;
+        } else {
+          result = false;
+        }
+      }
+
+      return result;
+    },
+    onArrowClick(direction) {
+      let selectDate = null;
+      if (direction === 'LEFT') {
+        selectDate = this.selectDate.subtract(1, 'month');
+        this.setSelectDate({ selectDate });
+      } else if (direction === 'RIGHT') {
+        selectDate = this.selectDate.add(1, 'month');
+        this.setSelectDate({ selectDate });
+      }
+    },
+    // 사용 내역 중 현재 '월'의 사용내역을 필터링한다
+    getCurrentMonthHistoryList() {
+      const currentMonth = dayjs().month();
+      const resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === currentMonth);
+
+      return resultData;
     },
   },
 };

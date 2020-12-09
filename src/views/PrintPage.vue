@@ -64,7 +64,7 @@
           합 계
         </div>
         <div class="amountPrice">
-          {{ totalAmount }}
+          {{ getTotalAmount }}
         </div>
       </div>
 
@@ -82,10 +82,7 @@ import corpStore from '@/mixins/corpStore';
 import utils from '@/utils/utils';
 import { cloneDeep } from 'lodash';
 import NProgress from 'nprogress';
-
-// NOTE: yu-dw 확인 후 원래 사용한게 더 좋으면 다시 바꿔주세요
-// lodash에 있는 cloneDeep이 완벽하게 별개 객체로 clone 해준다고 해서 씀
-// const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
+import dayjs from 'dayjs';
 
 export default {
   name: 'PrintPage',
@@ -137,14 +134,14 @@ export default {
         },
       ],
       printData: [],
-      totalAmount: 0,
       approver: '',
       reversedHistoryList: [],
     };
   },
   created() {
     // 프린트 페이지에서 browser refresh하는 경우 home으로 routing
-    if (!this.historyList.length) this.$router.push({ name: 'Home' });
+    const selectedMonthHistoryList = this.getSelectedMonthHistoryList();
+    if (!selectedMonthHistoryList.length) this.$router.push({ name: 'Home' });
 
     for (let i = 0; i < 25; i += 1) {
       const data = cloneDeep(this.tableData);
@@ -153,7 +150,7 @@ export default {
 
     // 메인 사용내역서는 최신순이고
     // 프린트용으로는 과거순으로 출력되야 하므로 역정렬 함
-    this.reversedHistoryList = cloneDeep(this.historyList).sort((a, b) => Number(a.usedDate) - Number(b.usedDate));
+    this.reversedHistoryList = cloneDeep(selectedMonthHistoryList).sort((a, b) => Number(dayjs(a.usedDate).valueOf()) - Number(dayjs(b.usedDate).valueOf()));
 
     for (let i = 0; i < this.reversedHistoryList.length; i += 1) {
       const history = this.reversedHistoryList[i];
@@ -185,6 +182,24 @@ export default {
       footer.style.display = 'block';
       vMain.style.padding = '64px 0px 0px';
     };
+  },
+  methods: {
+    getSelectedMonthHistoryList() {
+      let resultData = [];
+
+      if (!this.historyList.length) {
+        return resultData;
+      }
+      const selectedMonth = this.selectDate.month();
+      resultData = this.historyList.filter((list) => dayjs(list.usedDate).month() === selectedMonth);
+
+      return resultData;
+    },
+  },
+  computed: {
+    getTotalAmount() {
+      return utils.numberWithCommas(this.reversedHistoryList.reduce((accumulator, item) => accumulator + utils.stringWithCommasToNumber(item.amount), 0));
+    },
   },
 };
 </script>
@@ -325,12 +340,14 @@ export default {
       width: 141mm;
       line-height: 7mm;
       font-size:10.0pt;
+      color: black;
     }
 
     .amountPrice {
       width: 27mm;
       line-height: 7mm;
       font-size:10.0pt;
+      color: black;
     }
   }
 
@@ -339,12 +356,14 @@ export default {
     line-height: 12mm;
     font-size:10.0pt;
     text-align: center;
+    color: black;
   }
 }
 
 .bottom {
   text-align: right;
   font-size:10.0pt;
+  color: black;
 }
 
 @page {

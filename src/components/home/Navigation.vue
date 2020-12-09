@@ -2,9 +2,11 @@
   <v-app-bar
     app
     id="navigation"
+    color="primary"
   >
     <v-toolbar-title>
-      신기술 사업부 UI개발팀
+      <span class="white--text">신기술 사업부 UI개발팀</span>
+
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
@@ -12,21 +14,25 @@
     <v-btn
       text
       rounded
-      to="/">Home</v-btn>
+      to="/">
+      <span class="white--text">Home</span></v-btn>
     <v-btn
       text
       rounded
-      to="/statement">Statement</v-btn>
+      to="/statement">
+      <span class="white--text">Statement</span></v-btn>
     <v-btn
+      v-if="!checkIsMobileDevice"
       text
       rounded
-      to="/print">Print</v-btn>
+      to="/print">
+      <span class="white--text">Print</span></v-btn>
     <v-btn
       v-show="getIsLogin"
       text
       rounded
-      @click="logout"
-      >Logout</v-btn>
+      @click="logout">
+      <span class="white--text">Logout</span></v-btn>
   </v-app-bar>
 </template>
 
@@ -34,6 +40,7 @@
 import authService from '@/plugins/auth';
 import eventBus from '@/utils/eventBus';
 import { EVENTBUS_EVENT } from '@/config/constants';
+import utils from '@/utils/utils';
 
 export default {
   name: 'Navigation',
@@ -45,6 +52,9 @@ export default {
   computed: {
     getIsLogin() {
       return this.isLogin;
+    },
+    checkIsMobileDevice() {
+      return utils.isMobileDevice();
     },
   },
   created() {

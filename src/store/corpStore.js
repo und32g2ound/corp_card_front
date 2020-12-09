@@ -2,6 +2,7 @@ import axios from 'axios';
 import { MAX_LIMIT_A_MONTH } from '@/config/constants';
 import appConfig from '@/config/appConfig';
 import utils from '@/utils/utils';
+import dayjs from 'dayjs';
 
 export default {
   namespaced: true,
@@ -10,6 +11,7 @@ export default {
     totalBalanceAmount: 0,
     historyList: [],
     searchHistoryList: [],
+    selectDate: '', // 월별 데이터 조회를 위한 선택 date
   },
   mutations: {
     setHistoryList(state, payload) {
@@ -31,6 +33,9 @@ export default {
         state.limitBalance = payload.limitBalance;
       }
       state.totalBalanceAmount = payload.totalBalanceAmount;
+    },
+    setSelectDate(state, payload) {
+      state.selectDate = payload.selectDate;
     },
   },
   actions: {
@@ -95,7 +100,10 @@ export default {
       });
     },
     registration({ state, dispatch }, params) {
-      const balance = state.totalBalanceAmount - params.amount;
+      // 현재 '월'에 대해서만 사용금액이 계산되도록 한다.
+      const currentMonth = dayjs().month();
+      const usedMonth = dayjs(params.usedDate).month();
+      const balance = state.totalBalanceAmount - (currentMonth === usedMonth ? params.amount : 0);
 
       axios.post(`${appConfig.serverIP}/corp/registUsage`, {
         params,
