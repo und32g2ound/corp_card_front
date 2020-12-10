@@ -26,3 +26,4 @@ jobs:
     - run: npm i
     - run: npm run build --if-present
     # - run: npm test
+    - run: cp -R /home/iptvteam/actions-runner/deploy/corp_card_front/corp_card_front/dist/* /home/iptvteam/corp_card_server/public
