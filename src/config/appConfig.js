@@ -6,7 +6,7 @@ const appConfig = {
    * corp_server를 Local 에서 실행 시 port 3001로 실행이 됨
    * 배포 버전은 IPTV DEV FTP 서버인 http://114.202.216.45 환경으로 설정
    */
-  serverIP: LOCAL_DEV ? 'http://localhost:3001' : 'http://114.202.216.45:3001',
+  serverIP: LOCAL_DEV ? 'http://localhost:3001' : 'http://221.139.81.196:3001',
   isLogin: false, // 개발용 인증 여부
 };
 
