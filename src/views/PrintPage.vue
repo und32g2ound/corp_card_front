@@ -4,7 +4,7 @@
       <div class="line"></div>
 
       <div class="title">
-        법인카드 사용 내역서
+        법인카드 사용 내역
       </div>
 
       <div class="sign">
